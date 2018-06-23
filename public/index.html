@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>FIREBASE DATABASE TEST</title>
+  </head>
+
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBdluskFvMrgOc8YGZE13m1JAQ6puq2KZc",
+      authDomain: "fir-test-7a644.firebaseapp.com",
+      databaseURL: "https://fir-test-7a644.firebaseio.com",
+      projectId: "fir-test-7a644",
+      storageBucket: "fir-test-7a644.appspot.com",
+      messagingSenderId: "925146310984"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <body>
+    <p>FIREBASE TEST</p>
+  </body>
+
+  <script type="text/javascript">
+    var database = firebase.database();
+    var user = firebase.database().ref('user/');
+    user.on('value', function(snapshot) {
+      console.log(snapshot);
+    });
+  </script>
+</html>

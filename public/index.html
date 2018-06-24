@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>FIREBASE DATABASE TEST</title>
   </head>
 
@@ -16,6 +17,9 @@
   <script src="dependencies/fullcalendar.min.js"></script>
   <script src="dependencies/scheduler.min.js"></script>
   <script src="dependencies/ko.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
   <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
   <script>
@@ -41,12 +45,62 @@
     }
 
     .fc-time-grid .fc-slats td {
-      height: 5rem;
+      height: 10rem;
     }
   </style>
 
   <body>
     <div id='calendar'></div>
+
+    <!-- Add Block Modal -->
+    <div class="modal fade" id="addBlockModal" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">시간</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="addContent">내용:</label>
+              <input type="text" class="form-control" id="addContent">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="addBlockButton" type="button" class="btn btn-default" data-dismiss="modal">추가</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Event Block Modal -->
+    <div class="modal fade" id="eventBlockModal" role="dialog" data-backdrop="static">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">시간</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <p id="eventContent">
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="updateBlockButton" type="button" class="btn btn-default">수정</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </body>
 
   <script type="text/javascript">

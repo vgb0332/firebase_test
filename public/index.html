@@ -10,6 +10,13 @@
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
 
+  <link rel="stylesheet" type="text/css" href="dependencies/fullcalendar.min.css">
+  <link rel="stylesheet" type="text/css" href="dependencies/scheduler.min.css">
+  <script src="dependencies/moment.min.js"></script>
+  <script src="dependencies/fullcalendar.min.js"></script>
+  <script src="dependencies/scheduler.min.js"></script>
+  <script src="dependencies/ko.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
   <script>
     // Initialize Firebase
@@ -23,8 +30,23 @@
     };
     firebase.initializeApp(config);
   </script>
+
+  <style media="screen">
+    .fc-head, .fc-body {
+      font-size: 3vw;
+    }
+
+    .fc-header-toolbar {
+      font-size: 2.5vw;
+    }
+
+    .fc-time-grid .fc-slats td {
+      height: 5rem;
+    }
+  </style>
+
   <body>
-    <p>FIREBASE TEST</p>
+    <div id='calendar'></div>
   </body>
 
   <script type="text/javascript">
@@ -34,4 +56,6 @@
       console.log(snapshot);
     });
   </script>
+
+  <script src="js/calendarInit.js"></script>
 </html>

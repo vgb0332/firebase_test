@@ -1,13 +1,14 @@
 $(document).ready(function() {
+  console.log(new Date().getHours()-1+':'+Math.floor(new Date().getMinutes()/10)*10+':'+new Date().getSeconds());
   var start, end;
-  var calendar = $("#calendar");
+  var calendar = $("#calendar, #calendar-nextday");
 
   var writeFlag = false;
 
   calendar.fullCalendar({
     schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
     themeSystem: 'standard',
-    defaultView: 'agendaDay',
+    defaultView: 'agenda',
     groupByResource: true,
     resources: [
       { id: '01062610332', title: '정용석' },
@@ -16,43 +17,53 @@ $(document).ready(function() {
     slotDuration: '00:10:00',
     slotLabelFormat: 'a h:mm',
     nowIndicator: true,
-    height: 'auto',
+    scrollTime: new Date().getHours()-1+':'+Math.floor(new Date().getMinutes()/10)*10+':'+new Date().getSeconds(),
+    // height: '1000',
+    height: 'parent',
     aspectRatio: 1,
+    dragScroll : true,
     header: {
-      center: 'agendaDay,agendaTwoDay,addEventButton' // buttons for switching between views
+      // center: 'oneday,twoday,addEventButton',
+      right: '',
     },
+    header: false,
+    viewRender: function(view) {
+        var title = view.title;
+        $("#title").html(title);
+  	},
     views: {
-      agendaDay: {
+      oneday: {
         type: 'agenda',
-        duraction: { days: 1 },
+        duration: { days: 1 },
         buttonText: '1일',
       },
-      agendaTwoDay: {
+      twoday: {
         type: 'agenda',
         duration: { days: 2 },
         buttonText: '2일'
       }
     },
     customButtons: {
+      // onedayButton: {
+      //   text: '1일',
+      //   click: function() {
+      //     $("#calendar-nextday").hide();
+      //   }
+      // },
+      //
+      // twodayButton: {
+      //   text: '2일',
+      //   click: function() {
+      //     $("#calendar-nextday").show();
+      //   }
+      // },
+
       addEventButton: {
         text: '작성',
         click: function() {
           alert('시간을 선택해주세요(클릭 혹은 드래그)');
           writeFlag = true;
-          // console.log(writeFlag);
           calendar.fullCalendar('option', 'selectable', true);
-          // calendar.fullCalendar('option', 'unselectAuto', false);
-          // console.log(calendar.fullCalendar({selectable: true}));
-          // if (date.isValid()) {
-          //   $('#calendar').fullCalendar('renderEvent', {
-          //     title: 'dynamic event',
-          //     start: date,
-          //     allDay: true
-          //   });
-          //   alert('Great. Now, update your database...');
-          // } else {
-          //   alert('Invalid date.');
-          // }
         }
       }
     },
@@ -66,20 +77,8 @@ $(document).ready(function() {
       });
 
       $("#eventBlockModal").modal();
-      // event.title = "CLICKED!";
-      //
-      // $('#calendar').fullCalendar('updateEvent', event);
 
     },
-    // dayClick: function(date, jsEvent, view) {
-    //
-    //   console.log('Clicked on: ' + date.format());
-    //
-    //   // change the day's background color just for fun
-    //   // $(this).css('background-color', 'red');
-    //
-    // },
-    // selectable: false,
     selectHelper: true,
     longPressDelay : 10,
     select: function( start, end ) {
@@ -123,7 +122,30 @@ $(document).ready(function() {
     },
   });
 
+  $("#dayDisplay").click( function(e) {
+    if($(this).attr('data-type') === 'twoday'){
+      calendar.fullCalendar('changeView', 'twoday');
+      $(this).attr('data-type', 'oneday');
+      $(this).text('1일');
+    }
+    else{
+      calendar.fullCalendar('changeView', 'oneday');
+      $(this).attr('data-type', 'twoday');
+      $(this).text('2일');
+    }
+
+  });
+
+  $("#addButton").click( function(e) {
+    console.log('add button click');
+    alert('시간을 선택해주세요(클릭 혹은 드래그)');
+    writeFlag = true;
+    calendar.fullCalendar('option', 'selectable', true);
+  });
+
+
 });
+
 
 function getRandomColor() {
     var letters = 'BCDEF'.split('');

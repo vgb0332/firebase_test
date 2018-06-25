@@ -36,6 +36,9 @@
   </script>
 
   <style media="screen">
+    html, body {
+      height: 100%;
+    }
     .fc-head, .fc-body {
       font-size: 3vw;
     }
@@ -45,13 +48,57 @@
     }
 
     .fc-time-grid .fc-slats td {
-      height: 10rem;
+      height: 5rem;
+    }
+
+    .fixed-top {
+      position: fixed;
+      width: 100%;
+      height: 8vw;
+    }
+
+    .fixed-bottom {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 8vw;
+      background-color: #ffffff;
+      z-index: 10;
+    }
+
+    #addButton {
+      position: fixed;
+      bottom: 0;
+      right: 10px;
+      width: 50px;
+      height: 50px;
+      z-index: 10;
+    }
+
+    #calendar {
+      padding-top: 8vw;
+    }
+
+    #dayDisplay {
+      float: right;
+      padding: 0 20px;
+      height: 100%;
     }
   </style>
 
   <body>
+    <div class="fixed-top">
+      <span id="title"> </span>
+      <button id="dayDisplay" data-type='twoday' type="button" class="btn btn-default">2일</button>
+    </div>
+
     <div id='calendar'></div>
 
+    <img src="./images/add.png" alt="addButton" id="addButton"></img>
+    <!-- <div class="fixed-bottom">
+      this will be the fixed-bottom
+    </div> -->
+    <!-- <div id='calendar-nextday' style="display:none;"></div> -->
     <!-- Add Block Modal -->
     <div class="modal fade" id="addBlockModal" role="dialog" data-backdrop="static">
       <div class="modal-dialog">

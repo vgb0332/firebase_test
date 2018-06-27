@@ -22,15 +22,11 @@ html, body {
 .fixed-top {
   position: fixed;
   width: 100%;
-  height: 8vw;
+  /* height: 8vw; */
   font-size: 4vw;
-}
-
-.fixed-bottom {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 8vw;
+  text-align: center;
+  top: 0;
+  left: 0;
   background-color: #ffffff;
   z-index: 10;
 }
@@ -45,8 +41,14 @@ html, body {
   cursor: pointer;
 }
 
-.fixed-top {
-  text-align: center;
+#currentButton {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  width: 40px;
+  height: 40px;
+  z-index: 10;
+  cursor: pointer;
 }
 
 #title, #time {
@@ -56,13 +58,13 @@ html, body {
 }
 
 #calendar {
-  padding-top: 8vw;
+  padding-top: 25vw;
 }
 
-#dayDisplay {
-  float: right;
+#dayDisplay, #nextdayDisplay, #bothdayDisplay {
+  /* float: right; */
   padding: 0 20px;
-  height: 100%;
+  /* height: 100%; */
 }
 
 button.btn-mobileSelect-gen:not([class*=col-]):not([class*=form-control]):not(.input-group-btn):not(.btn-block) {

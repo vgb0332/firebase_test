@@ -3885,7 +3885,7 @@ var View = /** @class */ (function (_super) {
         if (dateMutation) {
             eventInstance.dateProfile = dateMutation.buildNewDateProfile(eventInstance.dateProfile, this.calendar);
         }
-        this.triggerEventDrop(eventInstance, 
+        this.triggerEventDrop(eventInstance,
         // a drop doesn't necessarily mean a date mutation (ex: resource change)
         (dateMutation && dateMutation.dateDelta) || moment.duration(), undoFunc, el, ev);
     };
@@ -5663,9 +5663,9 @@ var DragListener = /** @class */ (function () {
         this.scrollAlwaysKills = false;
         this.isAutoScroll = false;
         // defaults
-        this.scrollSensitivity = 30; // pixels from edge for scrolling to start
-        this.scrollSpeed = 200; // pixels per second, at maximum speed
-        this.scrollIntervalMs = 50; // millisecond wait between scroll increment
+        this.scrollSensitivity = 200; // pixels from edge for scrolling to start
+        this.scrollSpeed = 400; // pixels per second, at maximum speed
+        this.scrollIntervalMs = 30; // millisecond wait between scroll increment
         this.options = options || {};
     }
     // Interaction (high-level)

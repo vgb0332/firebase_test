@@ -8,6 +8,10 @@ $(document).ready(function() {
     themeSystem: 'standard',
     defaultView: 'agenda',
     groupByResource: true,
+    visibleRange: {
+      start: '2018-06-27',
+      end: moment().add('1', 'day'),
+    },
     resources: [
       { id: '01062610332', title: '정용석' },
     ],
@@ -186,23 +190,33 @@ $(document).ready(function() {
   });
 
   $("#dayDisplay").click( function(e) {
-    if($(this).attr('data-type') === 'twoday'){
-      calendar.fullCalendar('changeView', 'twoday');
-      $(this).attr('data-type', 'oneday');
-      $(this).text('1일보기');
-    }
-    else{
-      calendar.fullCalendar('changeView', 'oneday');
-      $(this).attr('data-type', 'twoday');
-      $(this).text('2일보기');
-    }
+    calendar.fullCalendar('changeView', 'oneday');
+    calendar.fullCalendar( 'gotoDate', moment('2018-06-27') );
+  });
 
+  $("#nextdayDisplay").click( function(e) {
+    calendar.fullCalendar('changeView', 'oneday');
+    calendar.fullCalendar( 'gotoDate', moment('2018-06-28') );
+  });
+
+  $("#bothdayDisplay").click( function(e) {
+    calendar.fullCalendar('changeView', 'twoday');
+    calendar.fullCalendar( 'gotoDate', moment('2018-06-27') );
   });
 
   $("#addButton").click( function(e) {
     console.log('add button click');
     alert('시간을 선택해주세요(클릭 혹은 드래그)');
     calendar.fullCalendar('option', 'selectable', true);
+  });
+
+  $("#currentButton").click( function(e) {
+    console.log($('.fc-now-indicator').position().top);
+    console.log($(window).height() / 2);
+    // $(".fc-scroller.fc-time-grid-container").scrollTop($('.fc-now-indicator').position().top - $(window).height() / 2);
+    $(".fc-scroller.fc-time-grid-container").animate({
+      scrollTop: $('.fc-now-indicator').position().top - $(window).height() / 2
+    });
   });
 
   //initialize current time for the title
@@ -255,6 +269,7 @@ $(document).ready(function() {
     }
   });
   console.log(calendar.fullCalendar( 'clientEvents' ))
+
 });
 
 

@@ -20,7 +20,8 @@
   <link rel="stylesheet" type="text/css" href="dependencies/jquery.timepicker.min.css">
   <link rel="stylesheet" type="text/css" href="css/calendar.css">
   <script src="dependencies/moment.min.js"></script>
-  <script src="dependencies/fullcalendar.min.js"></script>
+  <!-- <script src="dependencies/fullcalendar.min.js"></script> -->
+  <script src="fullcalendar-3.9.0/fullcalendar.js"></script>
   <script src="dependencies/bootstrap-fullscreen-select.min.js"></script>
   <script src="dependencies/scheduler.min.js"></script>
   <script src="dependencies/ko.js"></script>
@@ -45,13 +46,23 @@
   <body>
     <div class="fixed-top">
       <span id="title"> </span>
-      <span id="time"> </span>
-      <button id="dayDisplay" data-type='twoday' type="button" class="btn btn-default">2일보기</button>
+
+      <div>
+        현재시간: <span id="time"> </span>
+      </div>
+
+      <div>
+        <button id="dayDisplay" data-type='today' type="button" class="btn btn-default">첫째날</button>
+        <button id="nextdayDisplay" data-type='nextday' type="button" class="btn btn-default">둘째날</button>
+        <button id="bothdayDisplay" data-type='both' type="button" class="btn btn-default">같이보기</button>
+      </div>
+
     </div>
 
     <div id='calendar'></div>
 
     <img src="./images/add.png" alt="addButton" id="addButton"></img>
+    <img src="./images/current.png" alt="currentButton" id="currentButton"></img>
 
     <!-- Add Block Modal -->
     <div class="modal fade" id="addBlockModal" role="dialog" data-backdrop="static">

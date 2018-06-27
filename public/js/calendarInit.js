@@ -2,9 +2,7 @@ $(document).ready(function() {
   console.log(new Date().getHours()-1+':'+Math.floor(new Date().getMinutes()/10)*10+':'+new Date().getSeconds());
   var start, end;
   var calendar = $("#calendar, #calendar-nextday");
-
-  var writeFlag = false;
-
+  var currentEvent;
   calendar.fullCalendar({
     schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
     themeSystem: 'standard',
@@ -12,6 +10,40 @@ $(document).ready(function() {
     groupByResource: true,
     resources: [
       { id: '01062610332', title: '정용석' },
+    ],
+    events: [
+      {
+        // id: '01062610332',
+        resourceId: '01062610332',
+        title  : 'event1',
+        content: {
+          emotion : 'emotion',
+          location : 'location',
+        },
+        start  : moment(),
+        end: moment().add(30, 'minutes'),
+        allDay: false,
+        color: getRandomColor(),
+        textColor: '#333',
+        overlap: false,
+        // allDay : false // will make the time show
+      },
+      {
+        // id: '01062610332',
+        resourceId: '01062610332',
+        title  : 'event2',
+        content: {
+          emotion : 'emotion2',
+          location : 'location2',
+        },
+        start  : moment().add(30, 'minutes'),
+        end: moment().add(60, 'minutes'),
+        allDay: false,
+        color: getRandomColor(),
+        textColor: '#333',
+        overlap: false,
+        // allDay : false // will make the time show
+      },
     ],
     allDaySlot: false,
     slotDuration: '00:10:00',
@@ -27,9 +59,10 @@ $(document).ready(function() {
       right: '',
     },
     header: false,
+    defaultDate: moment(),
     viewRender: function(view) {
         var title = view.title;
-        $("#title").html(title);
+        $("#title").html( title );
   	},
     views: {
       oneday: {
@@ -43,73 +76,81 @@ $(document).ready(function() {
         buttonText: '2일'
       }
     },
-    customButtons: {
-      // onedayButton: {
-      //   text: '1일',
-      //   click: function() {
-      //     $("#calendar-nextday").hide();
-      //   }
-      // },
-      //
-      // twodayButton: {
-      //   text: '2일',
-      //   click: function() {
-      //     $("#calendar-nextday").show();
-      //   }
-      // },
-
-      addEventButton: {
-        text: '작성',
-        click: function() {
-          alert('시간을 선택해주세요(클릭 혹은 드래그)');
-          writeFlag = true;
-          calendar.fullCalendar('option', 'selectable', true);
-        }
-      }
-    },
+    eventBorderColor: '#333',
     eventClick: function(event, element) {
-      console.log(event);
-      $('#eventBlockModal').on('shown.bs.modal', function () {
+      if(calendar.fullCalendar('option', 'selectable')) return false;
+      $('#eventBlockModal').on('show.bs.modal', function () {
         var startDate = event.start.format('a h:mm');
         var endDate = event.end.format('a h:mm');
         $("#eventBlockModal .modal-title").text(startDate + ' - ' + endDate);
         $('#eventBlockModal #eventContent').text(event.title);
+        $('#eventBlockModal #emotionContent').text(event.content.emotion);
+        $('#eventBlockModal #locationContent').text(event.content.location);
       });
 
       $("#eventBlockModal").modal();
+      currentEvent = event;
 
     },
     selectHelper: true,
     longPressDelay : 10,
+    selectOverlap: false,
     select: function( start, end ) {
-      if(confirm('계속 진행하실까요?')){
-        var startDate = start.format('a h:mm');
-        var endDate = end.format('a h:mm');
+      var startDate = start.format('a h:mm');
+      var endDate = end.format('a h:mm');
+      if(confirm('시간: ' + startDate + ' ~ ' + endDate + '\n계속 진행하시겠습니까?')){
+        // var startDate = start.format('a h:mm');
+        // var endDate = end.format('a h:mm');
         // calendar.fullCalendar('option', 'unselectAuto', true);
 
-        $('#addBlockModal').on('shown.bs.modal', function () {
+        $('#addBlockModal').on('show.bs.modal', function () {
           $("#addBlockModal .modal-title").text(startDate + ' - ' + endDate);
           $('#addBlockModal #addContent').focus()
         });
         $("#addBlockModal").modal();
-        console.log($("#myModal #addContent").val());
+
+        $("#cancelAddBlockButton").click(function(e) {
+          console.log('cancel clicked');
+          $("#cancelAddBlockButton, #addBlockButton").off('click');
+          calendar.fullCalendar('option', 'selectable', false);
+        });
+
         $("#addBlockButton").click( function(e) {
+          var emotion = $("#addBlockModal #emotionSel").val();
+          var location = $("#addBlockModal #locationSel").val();
+          var title = $("#addContent").val();
+
+          if(emotion === '감정'){
+            alert('감정을 선택해주세요!');
+            return false;
+          }
+          if(location === '장소'){
+            alert('장소를 선택해주세요!');
+            return false;
+          }
+
           if( confirm('추가 하시겠습니까?') ){
               calendar.fullCalendar( 'renderEvent', {
-                id: '01062610332',
+                // id: '01062610332',
                 resourceId: '01062610332',
-                title: $("#addContent").val(),
+                title: title,
+                content: {
+                  emotion : emotion,
+                  location : location,
+                },
                 start: moment(start),
                 end: moment(end),
                 allDay: false,
                 color: getRandomColor(),
-                textColor: 'black',
+                textColor: '#333',
+                overlap: false,
               }, true);
           }
 
-          $("#addBlockButton").off('click');
-
+          console.log(calendar.fullCalendar( 'clientEvents' ))
+          $("#cancelAddBlockButton, #addBlockButton").off('click');
           calendar.fullCalendar('option', 'selectable', false);
+
         });
       }
       else{
@@ -122,16 +163,38 @@ $(document).ready(function() {
     },
   });
 
+  $('#emotionSel').mobileSelect({
+    title: '감정 수준',
+    buttonSave: '확인',
+    buttonCancel: '취소',
+    animation: 'scale',
+    animationSpeed: 400,
+    onClose: function(){
+        $("#emotionContent").html($(this).val());
+    },
+  });
+
+  $('#locationSel').mobileSelect({
+    title: '장소',
+    buttonSave: '확인',
+    buttonCancel: '취소',
+    animation: 'scale',
+    animationSpeed: 100,
+    onClose: function(){
+        $("#locationContent").html($(this).val());
+    },
+  });
+
   $("#dayDisplay").click( function(e) {
     if($(this).attr('data-type') === 'twoday'){
       calendar.fullCalendar('changeView', 'twoday');
       $(this).attr('data-type', 'oneday');
-      $(this).text('1일');
+      $(this).text('1일보기');
     }
     else{
       calendar.fullCalendar('changeView', 'oneday');
       $(this).attr('data-type', 'twoday');
-      $(this).text('2일');
+      $(this).text('2일보기');
     }
 
   });
@@ -139,12 +202,61 @@ $(document).ready(function() {
   $("#addButton").click( function(e) {
     console.log('add button click');
     alert('시간을 선택해주세요(클릭 혹은 드래그)');
-    writeFlag = true;
     calendar.fullCalendar('option', 'selectable', true);
   });
 
+  //initialize current time for the title
+  $("#time").html( moment().format("a h:mm") );
+  setInterval(function(){
+    console.log('rendering every minute');
+    var time = moment().format("a h:mm");
+    $("#time").html( time );
+  },60000);
 
+  $("#contentEditButton").click( function(e) {
+    $("#eventContent").attr('contenteditable', true).focus();
+  });
+
+  $("#emotionEditButton").click( function(e) {
+    $('#emotionSel').mobileSelect('show');
+  });
+
+  $("#locationEditButton").click( function(e) {
+    $('#locationSel').mobileSelect('show');
+  });
+
+  $("#updateBlockButton").click ( function(e) {
+    if( confirm('수정하시겠습니까?')) {
+      var emotion = $("#emotionContent").text();
+      var location = $("#locationContent").text();
+      var content = $("#eventContent").text();
+
+      currentEvent.title = content;
+      currentEvent.content.emotion = emotion;
+      currentEvent.content.location = location;
+
+      console.log(emotion, location, content, currentEvent);
+      calendar.fullCalendar( 'updateEvent', currentEvent );
+
+      $("#eventBlockModal").modal('hide');
+    }
+  });
+
+  $("#deleteBlockButton").click( function(e) {
+    console.log(currentEvent);
+    console.log(currentEvent._id);
+    if(confirm('삭제하시겠습니까?')) {
+      calendar.fullCalendar('removeEvents', function(event) {
+        return (event._id === currentEvent._id);
+      });
+
+      console.log(calendar.fullCalendar( 'clientEvents' ))
+      $("#eventBlockModal").modal("hide");
+    }
+  });
+  console.log(calendar.fullCalendar( 'clientEvents' ))
 });
+
 
 
 function getRandomColor() {

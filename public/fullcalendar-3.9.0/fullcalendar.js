@@ -5663,7 +5663,7 @@ var DragListener = /** @class */ (function () {
         this.scrollAlwaysKills = false;
         this.isAutoScroll = false;
         // defaults
-        this.scrollSensitivity = 200; // pixels from edge for scrolling to start
+        this.scrollSensitivity = 50; // pixels from edge for scrolling to start
         this.scrollSpeed = 400; // pixels per second, at maximum speed
         this.scrollIntervalMs = 30; // millisecond wait between scroll increment
         this.options = options || {};

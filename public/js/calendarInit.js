@@ -9,46 +9,46 @@ $(document).ready(function() {
     defaultView: 'agenda',
     groupByResource: true,
     visibleRange: {
-      start: '2018-06-27',
+      start: '2018-06-30',
       end: moment().add('1', 'day'),
     },
     resources: [
       { id: '01062610332', title: '정용석' },
     ],
-    events: [
-      {
-        // id: '01062610332',
-        resourceId: '01062610332',
-        title  : 'event1',
-        content: {
-          emotion : 'emotion',
-          location : 'location',
-        },
-        start  : moment(),
-        end: moment().add(30, 'minutes'),
-        allDay: false,
-        color: getRandomColor(),
-        textColor: '#333',
-        overlap: false,
-        // allDay : false // will make the time show
-      },
-      {
-        // id: '01062610332',
-        resourceId: '01062610332',
-        title  : 'event2',
-        content: {
-          emotion : 'emotion2',
-          location : 'location2',
-        },
-        start  : moment().add(30, 'minutes'),
-        end: moment().add(60, 'minutes'),
-        allDay: false,
-        color: getRandomColor(),
-        textColor: '#333',
-        overlap: false,
-        // allDay : false // will make the time show
-      },
-    ],
+    // events: [
+    //   {
+    //     // id: '01062610332',
+    //     resourceId: '01062610332',
+    //     title  : 'event1',
+    //     content: {
+    //       emotion : 'emotion',
+    //       location : 'location',
+    //     },
+    //     start  : moment(),
+    //     end: moment().add(30, 'minutes'),
+    //     allDay: false,
+    //     color: getRandomColor(),
+    //     textColor: '#333',
+    //     overlap: false,
+    //     // allDay : false // will make the time show
+    //   },
+    //   {
+    //     // id: '01062610332',
+    //     resourceId: '01062610332',
+    //     title  : 'event2',
+    //     content: {
+    //       emotion : 'emotion2',
+    //       location : 'location2',
+    //     },
+    //     start  : moment().add(30, 'minutes'),
+    //     end: moment().add(60, 'minutes'),
+    //     allDay: false,
+    //     color: getRandomColor(),
+    //     textColor: '#333',
+    //     overlap: false,
+    //     // allDay : false // will make the time show
+    //   },
+    // ],
     allDaySlot: false,
     slotDuration: '00:10:00',
     slotLabelFormat: 'a h:mm',
@@ -165,6 +165,7 @@ $(document).ready(function() {
     selectAllow: function(selectInfo) {
       console.log(selectInfo);
     },
+    snapDuration: "00:10:00",
   });
 
   $('#emotionSel').mobileSelect({

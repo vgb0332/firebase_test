@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>LOGIN</title>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/login.css">
+  </head>
+  <body>
+    <div class="wrapper">
+    	<div class="container">
+    		<h1>Welcome</h1>
+
+    		<form class="form">
+    			<input type="text" placeholder="아이디(핸드폰 번호)">
+    			<input type="password" placeholder="비밀번호">
+    			<button type="submit" id="login-button">로그인</button>
+          <button type="register" id="register-button">회원가입</button>
+    		</form>
+    	</div>
+
+    	<ul class="bg-bubbles">
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    	</ul>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    $("#login-button").click(function(event){
+       event.preventDefault();
+       //check if user exists, if user logins the FIRST TIME, redirect accordingly
+       $('form').fadeOut(500,  function(e) {
+         $('.wrapper').addClass('form-success');
+         console.log('login');
+         window.location.href = "index.html";
+       });
+
+    });
+
+    $("#register-button").click(function(event){
+       event.preventDefault();
+
+       $('form').fadeOut(500,  function(e) {
+         $('.wrapper').addClass('form-success');
+         console.log('register');
+         window.location.href = "register.html";
+       });
+
+    });
+  </script>
+</html>

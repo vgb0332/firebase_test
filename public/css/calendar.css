@@ -41,6 +41,10 @@ html, body {
   cursor: pointer;
 }
 
+#addButton.active {
+  opacity: .5;
+}
+
 #currentButton {
   position: fixed;
   bottom: 10px;
@@ -58,7 +62,7 @@ html, body {
 }
 
 #calendar {
-  padding-top: 25vw;
+  padding-top: 30vw;
 }
 
 #dayDisplay, #nextdayDisplay, #bothdayDisplay {

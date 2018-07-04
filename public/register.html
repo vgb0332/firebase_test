@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>REGISTER</title>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/register.css">
+  </head>
+  <body>
+    <div class="wrapper">
+    	<div class="container">
+    		<h1>회원가입</h1>
+
+    		<form class="form">
+    			<input id="phone" type="text" placeholder="아이디(핸드폰 번호)">
+          <input id="name" type="text" placeholder="이름">
+    			<input id="pass" type="password" placeholder="비밀번호">
+          <input id="passcheck" type="password" placeholder="비밀번호 확인">
+    			<!-- <button type="submit" id="login-button">로그인</button> -->
+          <button type="register" id="register-button">회원가입</button>
+    		</form>
+    	</div>
+
+    	<ul class="bg-bubbles">
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    		<li></li>
+    	</ul>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    $("#register-button").click(function(event){
+       event.preventDefault();
+       //check for empty inputs
+       var id = $("#phone").val();
+       var name = $("#name").val();
+       var pass = $("#pass").val();
+       var passcheck = $("#passcheck").val();
+       console.log(id, name, pass, passcheck);
+
+       if(!id) {
+         alert('아이디(핸드폰 번호)를 입력해주세요!');
+         $("#phone").focus();
+         return false;
+       }
+       if(!name) {
+         alert('이름를 입력해주세요!');
+         $("#name").focus();
+         return false;
+       }
+       if(!pass) {
+         alert('비밀번호를 입력해주세요!');
+         $("#pass").focus();
+         return false;
+       }
+       if(!passcheck) {
+         alert('비밀번호 확인을 입력해주세요!');
+         $("#passcheck").focus();
+         return false;
+       }
+       if(pass !== passcheck) {
+         alert('입력하신 비밀번호가 일치하지 않습니다!');
+         $("#passcheck").focus();
+         return false;
+       }
+
+       //회원가입 로직 필요
+       $('form').fadeOut(500,  function(e) {
+         $('.wrapper').addClass('form-success');
+         alert('회원가입이 완료되었습니다!');
+         window.location.href = "index.html";
+       });
+    });
+  </script>
+</html>

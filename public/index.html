@@ -19,6 +19,7 @@
   <link rel="stylesheet" type="text/css" href="dependencies/scheduler.min.css">
   <link rel="stylesheet" type="text/css" href="dependencies/jquery.timepicker.min.css">
   <link rel="stylesheet" type="text/css" href="css/calendar.css">
+  <link rel="stylesheet" type="text/css" href="css/index.css">
   <script src="dependencies/moment.min.js"></script>
   <!-- <script src="dependencies/fullcalendar.min.js"></script> -->
   <script src="fullcalendar-3.9.0/fullcalendar.js"></script>
@@ -50,6 +51,9 @@
       <div>
         현재시간: <span id="time"> </span>
       </div>
+      <div>
+        총 작성시간: <span id="spent-time"> </span> 분(<span id="spent-time-hm"></span>)
+      </div>
 
       <div>
         <button id="dayDisplay" data-type='today' type="button" class="btn btn-default">첫째날</button>
@@ -77,28 +81,217 @@
           <div class="modal-body">
             <div class="form-group">
 
-              <p>감정 수준</p>
-              <select id="emotionSel" class="form-control mobileSelect">
-                  <option value="감정"></option>
-                  <option value="매우좋음">매우좋음</option>
-                  <option value="좋음">좋음</option>
-                  <option value="보통">보통</option>
-                  <option value="나쁨">나쁨</option>
-                  <option value="매우나쁨">매우나쁨</option>
-              </select>
-
-              <p>장소</p>
-              <select id="locationSel" class="form-control mobileSelect">
-                  <option value="장소"></option>
-                  <option value="집">집</option>
-                  <option value="버스">버스</option>
-                  <option value="지하철">지하철</option>
-                  <option value="직장">직장</option>
-              </select>
-
               <!-- <label for="addContent">내용:</label> -->
-              <p>내용</p>
+              <p style="font-weight: bold;">내용</p>
               <input type="text" class="form-control" id="addContent">
+
+              <p style="font-weight: bold;">장소</p>
+              <div id="locationSel" class="check-container" style="border:0">
+                  <div class="button-wrap location" style="text-align: center;">
+                    <input class="hidden radio-label location" type="radio" name="location" id="house" value="집" checked="checked" />
+                    <label class="button-label" for="house">
+                      <span>집</span>
+                    </label>
+                    <input class="hidden radio-label location" type="radio" name="location" id="work" value="직장"/>
+                    <label class="button-label" for="work">
+                      <span>직장</span>
+                    </label>
+                    <input class="hidden radio-label location" type="radio" name="location" id="outside" value="밖"/>
+                    <label class="button-label" for="outside">
+                      <span>밖</span>
+                    </label>
+                    <input class="hidden radio-label location" type="radio" name="location" id="transportation" value="이동수단"/>
+                    <label style="width:70px" class="button-label" for="transportation">
+                      <span>이동수단</span>
+                    </label>
+                  </div>
+              </div>
+
+              <p style="font-weight: bold;">감정 수준</p>
+              <div class="check-container" id="happySel">
+                  <div> 즐거움 </div>
+                  <div class="button-wrap">
+                    <!-- <span> 즐거움 </span> -->
+                    <input class="hidden radio-label options" type="radio" name="happiness" id="happy-0" value="0" checked="checked"/>
+                    <label class="button-label" for="happy-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happiness" id="happy-1" value="1"  />
+                    <label class="button-label" for="happy-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happiness" id="happy-2" value="2"  />
+                    <label class="button-label" for="happy-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happiness" id="happy-3" value="3" />
+                    <label class="button-label" for="happy-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happiness" id="happy-4" value="4" />
+                    <label class="button-label" for="happy-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happiness" id="happy-5" value="5"  />
+                    <label class="button-label" for="happy-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+              <div class="check-container" id="satisfactionSel">
+                  <span>만족감/<br>성취감</span>
+                  <div class="button-wrap" style="margin-top:-2.5em;">
+
+                    <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-0" value="0" checked="checked"/>
+                    <label class="button-label" for="satisfaction-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-1" value="1" />
+                    <label class="button-label" for="satisfaction-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-2" value="2" />
+                    <label class="button-label" for="satisfaction-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-3" value="3" />
+                    <label class="button-label" for="satisfaction-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-4" value="4" />
+                    <label class="button-label" for="satisfaction-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-5" value="5"  />
+                    <label class="button-label" for="satisfaction-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+
+              <div class="check-container" id="depressionSel">
+                  <span>우울감</span>
+                  <div class="button-wrap">
+
+                    <input class="hidden radio-label options" type="radio" name="depression" id="depression-0" value="0" checked="checked"/>
+                    <label class="button-label" for="depression-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression" id="depression-1" value="1"  />
+                    <label class="button-label" for="depression-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression" id="depression-2" value="2" />
+                    <label class="button-label" for="depression-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression" id="depression-3" value="3" />
+                    <label class="button-label" for="depression-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression" id="depression-4" value="4" />
+                    <label class="button-label" for="depression-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression" id="depression-5" value="5" />
+                    <label class="button-label" for="depression-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+
+              <div class="check-container" id="anxietySel">
+                  <span>걱정/<br>불안</span>
+                  <div class="button-wrap" style="margin-top:-2.5em;">
+
+                    <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-0" value="0" checked="checked"/>
+                    <label class="button-label" for="anxiety-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-1" value="1" />
+                    <label class="button-label" for="anxiety-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-2" value="2" />
+                    <label class="button-label" for="anxiety-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-3" value="3" />
+                    <label class="button-label" for="anxiety-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-4" value="4"  />
+                    <label class="button-label" for="anxiety-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-5" value="5" />
+                    <label class="button-label" for="anxiety-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+
+            </div>
+
+            <div class="check-container" id="angerSel">
+                <span>분노</span>
+                <div class="button-wrap">
+
+                  <input class="hidden radio-label options" type="radio" name="anger" id="anger-0" value="0" checked="checked"/>
+                  <label class="button-label" for="anger-0">
+                    <span>0</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger" id="anger-1" value="1" />
+                  <label class="button-label" for="anger-1">
+                    <span>1</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger" id="anger-2" value="2" />
+                  <label class="button-label" for="anger-2">
+                    <span>2</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger" id="anger-3" value="3" />
+                  <label class="button-label" for="anger-3">
+                    <span>3</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger" id="anger-4" value="4" />
+                  <label class="button-label" for="anger-4">
+                    <span>4</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger" id="anger-5" value="5" />
+                  <label class="button-label" for="anger-5">
+                    <span>5</span>
+                  </label>
+                </div>
+            </div>
+
+            <div class="check-container" id="fatigueSel">
+                <span>피곤함/<br>힘듬</span>
+                <div class="button-wrap" style="margin-top:-2.5em;">
+                  <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-0" value="0" checked="checked"/>
+                  <label class="button-label" for="fatigue-0">
+                    <span>0</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-1" value="1" />
+                  <label class="button-label" for="fatigue-1">
+                    <span>1</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-2" value="2" />
+                  <label class="button-label" for="fatigue-2">
+                    <span>2</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-3" value="3" />
+                  <label class="button-label" for="fatigue-3">
+                    <span>3</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-4" value="4" />
+                  <label class="button-label" for="fatigue-4">
+                    <span>4</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-5" value="5"  />
+                  <label class="button-label" for="fatigue-5">
+                    <span>5</span>
+                  </label>
+                </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -121,24 +314,227 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <p>
-                감정 수준
-                <img style="float:right;width:20px;" src="./images/add.png" alt="editButton" id="emotionEditButton"></img>
-              </p>
-              <p id="emotionContent"></p>
-
-              <p>
-                장소
-                <img style="float:right;width:20px;" src="./images/add.png" alt="editButton" id="locationEditButton"></img>
-              </p>
-              <p id="locationContent"></p>
-
-              <p>
+              <p style="font-weight: bold;">
                 내용
                 <img style="float:right;width:20px;" src="./images/add.png" alt="editButton" id="contentEditButton"></img>
               </p>
               <p id="eventContent">
               </p>
+
+              <p style="font-weight: bold;">
+                장소
+                <img style="float:right;width:20px;" src="./images/add.png" alt="editButton" id="locationEditButton"></img>
+              </p>
+              <div id="locationContent" class="check-container" style="border:0">
+                  <div class="button-wrap location" style="text-align: center;">
+                    <input class="hidden radio-label location" type="radio" name="location-e" id="house-e" value="집" disabled />
+                    <label class="button-label" for="house-e">
+                      <span>집</span>
+                    </label>
+                    <input class="hidden radio-label location" type="radio" name="location-e" id="work-e" value="직장" disabled/>
+                    <label class="button-label" for="work-e">
+                      <span>직장</span>
+                    </label>
+                    <input class="hidden radio-label location" type="radio" name="location-e" id="outside-e" value="밖" disabled/>
+                    <label class="button-label" for="outside-e">
+                      <span>밖</span>
+                    </label>
+                    <input class="hidden radio-label location" type="radio" name="location-e" id="transportation-e" value="이동수단" disabled/>
+                    <label style="width:70px" class="button-label" for="transportation-e">
+                      <span>이동수단</span>
+                    </label>
+                  </div>
+              </div>
+
+              <p style="font-weight: bold;">
+                감정 수준
+                <img style="float:right;width:20px;" src="./images/add.png" alt="editButton" id="emotionEditButton"></img>
+              </p>
+              <div class="check-container" id="happyContent">
+                  <div> 즐거움 </div>
+                  <div class="button-wrap">
+                    <!-- <span> 즐거움 </span> -->
+                    <input class="hidden radio-label options" type="radio" name="happinessContent-e" id="happy-e-0" value="0" disabled/>
+                    <label class="button-label" for="happy-e-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happinessContent-e" id="happy-e-1" value="1"  disabled/>
+                    <label class="button-label" for="happy-e-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happinessContent-e" id="happy-e-2" value="2"  disabled/>
+                    <label class="button-label" for="happy-e-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happinessContent-e" id="happy-e-3" value="3" disabled />
+                    <label class="button-label" for="happy-e-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happinessContent-e" id="happy-e-4" value="4" disabled />
+                    <label class="button-label" for="happy-e-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="happinessContent-e" id="happy-e-5" value="5" disabled />
+                    <label class="button-label" for="happy-e-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+              <div class="check-container" id="satisfactionContent">
+                  <span>만족감/<br>성취감</span>
+                  <div class="button-wrap" style="margin-top:-2.5em;">
+
+                    <input class="hidden radio-label options" type="radio" name="satisfaction-e" id="satisfaction-e-0" value="0" disabled/>
+                    <label class="button-label" for="satisfaction-e-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction-e" id="satisfaction-e-1" value="1" disabled/>
+                    <label class="button-label" for="satisfaction-e-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction-e" id="satisfaction-e-2" value="2" disabled/>
+                    <label class="button-label" for="satisfaction-e-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction-e" id="satisfaction-e-3" value="3" disabled/>
+                    <label class="button-label" for="satisfaction-e-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction-e" id="satisfaction-e-4" value="4" disabled/>
+                    <label class="button-label" for="satisfaction-e-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="satisfaction-e" id="satisfaction-e-5" value="5" disabled/>
+                    <label class="button-label" for="satisfaction-e-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+
+              <div class="check-container" id="depressionContent">
+                  <span>우울감</span>
+                  <div class="button-wrap">
+
+                    <input class="hidden radio-label options" type="radio" name="depression-e" id="depression-e-0" value="0" disabled/>
+                    <label class="button-label" for="depression-e-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression-e" id="depression-e-1" value="1" disabled />
+                    <label class="button-label" for="depression-e-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression-e" id="depression-e-2" value="2" disabled/>
+                    <label class="button-label" for="depression-e-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression-e" id="depression-e-3" value="3" disabled/>
+                    <label class="button-label" for="depression-e-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression-e" id="depression-e-4" value="4" disabled/>
+                    <label class="button-label" for="depression-e-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="depression-e" id="depression-e-5" value="5" disabled/>
+                    <label class="button-label" for="depression-e-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+
+              <div class="check-container" id="anxietyContent">
+                  <span>걱정/<br>불안</span>
+                  <div class="button-wrap" style="margin-top:-2.5em;">
+
+                    <input class="hidden radio-label options" type="radio" name="anxiety-e" id="anxiety-e-0" value="0" disabled/>
+                    <label class="button-label" for="anxiety-e-0">
+                      <span>0</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety-e" id="anxiety-e-1" value="1" disabled/>
+                    <label class="button-label" for="anxiety-e-1">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety-e" id="anxiety-e-2" value="2" disabled/>
+                    <label class="button-label" for="anxiety-e-2">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety-e" id="anxiety-e-3" value="3" disabled/>
+                    <label class="button-label" for="anxiety-e-3">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety-e" id="anxiety-e-4" value="4" disabled />
+                    <label class="button-label" for="anxiety-e-4">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="anxiety-e" id="anxiety-e-5" value="5" disabled/>
+                    <label class="button-label" for="anxiety-e-5">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
+
+            </div>
+
+            <div class="check-container" id="angerContent">
+                <span>분노</span>
+                <div class="button-wrap">
+
+                  <input class="hidden radio-label options" type="radio" name="anger-e" id="anger-e-0" value="0" disabled/>
+                  <label class="button-label" for="anger-e-0">
+                    <span>0</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger-e" id="anger-e-1" value="1" disabled/>
+                  <label class="button-label" for="anger-e-1">
+                    <span>1</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger-e" id="anger-e-2" value="2" disabled/>
+                  <label class="button-label" for="anger-e-2">
+                    <span>2</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger-e" id="anger-e-3" value="3" disabled />
+                  <label class="button-label" for="anger-e-3">
+                    <span>3</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger-e" id="anger-e-4" value="4" disabled/>
+                  <label class="button-label" for="anger-e-4">
+                    <span>4</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="anger-e" id="anger-e-5" value="5" disabled/>
+                  <label class="button-label" for="anger-e-5">
+                    <span>5</span>
+                  </label>
+                </div>
+            </div>
+
+            <div class="check-container" id="fatigueContent">
+                <span>피곤함/<br>힘듬</span>
+                <div class="button-wrap" style="margin-top:-2.5em;">
+                  <input class="hidden radio-label options" type="radio" name="fatigue-e" id="fatigue-e-0" value="0" disabled/>
+                  <label class="button-label" for="fatigue-e-0">
+                    <span>0</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue-e" id="fatigue-e-1" value="1" disabled/>
+                  <label class="button-label" for="fatigue-e-1">
+                    <span>1</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue-e" id="fatigue-e-2" value="2" disabled/>
+                  <label class="button-label" for="fatigue-e-2">
+                    <span>2</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue-e" id="fatigue-e-3" value="3" disabled/>
+                  <label class="button-label" for="fatigue-e-3">
+                    <span>3</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue-e" id="fatigue-e-4" value="4" disabled/>
+                  <label class="button-label" for="fatigue-e-4">
+                    <span>4</span>
+                  </label>
+                  <input class="hidden radio-label options" type="radio" name="fatigue-e" id="fatigue-e-5" value="5" disabled />
+                  <label class="button-label" for="fatigue-e-5">
+                    <span>5</span>
+                  </label>
+                </div>
+            </div>
             </div>
           </div>
           <div class="modal-footer">

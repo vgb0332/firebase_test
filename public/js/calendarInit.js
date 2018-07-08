@@ -6,7 +6,7 @@ $(document).ready(function() {
   calendar.fullCalendar({
     schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
     themeSystem: 'standard',
-    defaultView: 'agenda',
+    defaultView: 'oneday',
     groupByResource: true,
     // visibleRange: {
     //   start: moment(),
@@ -67,7 +67,10 @@ $(document).ready(function() {
     viewRender: function(view) {
         var title = view.title;
         $("#title").html( title );
-        console.log(calendar.fullCalendar( 'clientEvents' ));
+        // console.log(calendar.fullCalendar( 'getView' ));
+        var view = calendar.fullCalendar('getView');
+        console.log(view);
+        var type = view.type;
         var events = calendar.fullCalendar( 'clientEvents' );
         var totTime = 0;
         $.each(events, function( index, event ) {
@@ -76,8 +79,13 @@ $(document).ready(function() {
           totTime+= diff;
         });
 
-        $("#spent-time").html(totTime);
-        $("#spent-time-hm").html(Math.floor(totTime / 60).toFixed(0) + '시간 ' + totTime % 60 + '분');
+        $("#spent-time-hm").html(
+          Math.floor(totTime / 60).toFixed(0) + '시간 ' + totTime % 60 + '분'
+        );
+        console.log(type);
+        $("#remaining-time").html (
+          type === 'oneday' ? '/ 24시간' : '/ 48시간'
+        );
   	},
     views: {
       oneday: {

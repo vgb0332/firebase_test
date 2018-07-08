@@ -3,6 +3,7 @@ $(document).ready(function() {
   var start, end;
   var calendar = $("#calendar, #calendar-nextday");
   var currentEvent;
+  var isAdd = false;
   calendar.fullCalendar({
     schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
     themeSystem: 'standard',
@@ -69,20 +70,32 @@ $(document).ready(function() {
         $("#title").html( title );
         // console.log(calendar.fullCalendar( 'getView' ));
         var view = calendar.fullCalendar('getView');
-        console.log(view);
+        var curDate = view.start.format('DD');
         var type = view.type;
         var events = calendar.fullCalendar( 'clientEvents' );
-        var totTime = 0;
+        var totTime = {
+          total: 0,
+        };
         $.each(events, function( index, event ) {
-          console.log(event);
           var diff = moment.duration( event.end.diff(event.start) ).asMinutes();
-          totTime+= diff;
+          var date = event.start.format('DD');
+          //if no key, initialize by 0
+          if( !(date in totTime) ) totTime[date] = 0;
+          totTime[date] += diff;
+          totTime['total'] += diff;
         });
+        console.log(totTime);
+        if(!event) {
+          $("#spent-time-hm").html('-');
+        }
+        else {
+          $("#spent-time-hm").html(
+            type === 'oneday' ? Math.floor(totTime[curDate] / 60).toFixed(0) + '시간 ' + (totTime[curDate]) % 60 + '분' :
+                                Math.floor(totTime['total'] / 60).toFixed(0) + '시간 ' + totTime['total'] % 60 + '분'
+          );
+        }
 
-        $("#spent-time-hm").html(
-          Math.floor(totTime / 60).toFixed(0) + '시간 ' + totTime % 60 + '분'
-        );
-        console.log(type);
+
         $("#remaining-time").html (
           type === 'oneday' ? '/ 24시간' : '/ 48시간'
         );
@@ -101,11 +114,10 @@ $(document).ready(function() {
     },
     eventBorderColor: '#333',
     eventClick: function(event, element) {
-      if(calendar.fullCalendar('option', 'selectable')) return false;
+      if(isAdd) return false;
       $('#eventBlockModal').on('show.bs.modal', function () {
         var startDate = event.start.format('a h:mm');
         var endDate = event.end.format('a h:mm');
-        console.log(event);
         $("#contentEditButton, #locationEditButton, #emotionEditButton").removeClass('active');
 
         $("#eventContent").attr('contenteditable', false);
@@ -134,101 +146,178 @@ $(document).ready(function() {
 
     },
     selectHelper: true,
-    longPressDelay : 10,
+    // longPressDelay : 10,
     selectOverlap: false,
-    select: function( start, end ) {
-      var startDate = start.format('a h:mm');
-      var endDate = end.format('a h:mm');
-      if(confirm('시간: ' + startDate + ' ~ ' + endDate + '\n계속 진행하시겠습니까?')){
-        // var startDate = start.format('a h:mm');
-        // var endDate = end.format('a h:mm');
-        // calendar.fullCalendar('option', 'unselectAuto', true);
+    eventOverlap: false,
+    // select: function( start, end ) {
+    //   var startDate = start.format('a h:mm');
+    //   var endDate = end.format('a h:mm');
+    //   if(confirm('시간: ' + startDate + ' ~ ' + endDate + '\n계속 진행하시겠습니까?')){
+    //     // var startDate = start.format('a h:mm');
+    //     // var endDate = end.format('a h:mm');
+    //     // calendar.fullCalendar('option', 'unselectAuto', true);
+    //
+    //     $('#addBlockModal').on('show.bs.modal', function () {
+    //       $("#addBlockModal .modal-title").text(startDate + ' - ' + endDate);
+    //       $('#addBlockModal #addContent').focus()
+    //     });
+    //     $("#addBlockModal").modal();
+    //
+    //     $("#cancelAddBlockButton").click(function(e) {
+    //       console.log('cancel clicked');
+    //       $("#cancelAddBlockButton, #addBlockButton").off('click');
+    //       $("#addButton").removeClass('active');
+    //       calendar.fullCalendar('option', 'selectable', false);
+    //     });
+    //
+    //     $("#addBlockButton").click( function(e) {
+    //       var location = $("#addBlockModal #locationSel input[type=radio]:checked").val();
+    //       var title = $("#addContent").val();
+    //       var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
+    //       var satisfaction = $("#addBlockModal #satisfactionSel input[type=radio]:checked").val();
+    //       var depression = $("#addBlockModal #depressionSel input[type=radio]:checked").val();
+    //       var anxiety = $("#addBlockModal #anxietySel input[type=radio]:checked").val();
+    //       var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
+    //       var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
+    //
+    //       if( confirm('추가 하시겠습니까?') ){
+    //           calendar.fullCalendar( 'renderEvent', {
+    //             // id: '01062610332',
+    //             resourceId: '01062610332',
+    //             title: title,
+    //             content: {
+    //               title: title,
+    //               location : location,
+    //               happy: happy,
+    //               satisfaction: satisfaction,
+    //               depression : depression,
+    //               anxiety: anxiety,
+    //               anger: anger,
+    //               fatigue: fatigue,
+    //             },
+    //             start: moment(start),
+    //             end: moment(end),
+    //             allDay: false,
+    //             color: getRandomColor(),
+    //             textColor: '#333',
+    //             overlap: false,
+    //           }, true);
+    //       }
+    //
+    //       console.log(calendar.fullCalendar( 'clientEvents' ))
+    //       $("#cancelAddBlockButton, #addBlockButton").off('click');
+    //       calendar.fullCalendar('option', 'selectable', false);
+    //       $("#addButton").removeClass('active');
+    //     });
+    //   }
+    //   else{
+    //     calendar.fullCalendar('unselect');
+    //   }
+    //
+    // },
+    dayClick : function(date, jsEvent, view) {
+      if(!isAdd) return false;
+      console.log('dayclick', date, jsEvent, view);
+      if(!start) {
+        start = date;
+        $("#startMessage").slideUp();
+        $(jsEvent.target).css('background-color', getRandomColor());
+        var time = date.format('hh:mm:ss');
+        $("#endMessage").slideDown();
+        return false;
+      }
 
-        $('#addBlockModal').on('show.bs.modal', function () {
-          $("#addBlockModal .modal-title").text(startDate + ' - ' + endDate);
-          $('#addBlockModal #addContent').focus()
+      if(!end) {
+        if( date < start ) { alert('시작 시간 보다 끝 시간이 더 빠를 수 없습니다\n다시 선택해 주세요'); return false; }
+
+        var events = calendar.fullCalendar( 'clientEvents' );
+        var isInclude = false;
+        $.each( events, function(index, event) {
+          console.log(event);
+          var e_start = moment(event.start);
+          var e_end = moment(event.end);
+          console.log(date);
+          if( start < e_start && date > e_end ) { alert('중복된 이벤트를 기입할 수 없습니다!\n다시 선택해 주세요'); isInclude = true; return false;}
+          isInclude = false;
         });
-        $("#addBlockModal").modal();
+        console.log(isInclude);
+        if(isInclude) return false;
+        end = date;
 
-        $("#cancelAddBlockButton").click(function(e) {
-          console.log('cancel clicked');
-          $("#cancelAddBlockButton, #addBlockButton").off('click');
-          $("#addButton").removeClass('active');
-          calendar.fullCalendar('option', 'selectable', false);
-        });
+        $("#endMessage").slideUp();
+        $(jsEvent.target).css('background-color', getRandomColor());
+        $(".fc-widget-content").css('background-color', '');
+        calendar.fullCalendar( 'select', moment(start), moment(end).add(10, 'minutes') );
+        var startDate = moment(start).format('a hh:mm');
+        var endDate = moment(end).add(10, 'minutes').format('a hh:mm');
+        setTimeout( function() {
+          if(confirm('시간: ' + startDate + ' ~ ' + endDate + '\n계속 진행하시겠습니까?')){
+            // calendar.fullCalendar('option', 'unselectAuto', true);
 
-        $("#addBlockButton").click( function(e) {
-          var location = $("#addBlockModal #locationSel input[type=radio]:checked").val();
-          var title = $("#addContent").val();
-          var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
-          var satisfaction = $("#addBlockModal #satisfactionSel input[type=radio]:checked").val();
-          var depression = $("#addBlockModal #depressionSel input[type=radio]:checked").val();
-          var anxiety = $("#addBlockModal #anxietySel input[type=radio]:checked").val();
-          var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
-          var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
+            $('#addBlockModal').on('show.bs.modal', function () {
+              $("#addBlockModal .modal-title").text(moment(start).format('a hh:mm') + ' - ' + moment(end).add(10, 'minutes').format('a hh:mm'));
+              $('#addBlockModal #addContent').focus()
+            });
+            $("#addBlockModal").modal();
 
-          if( confirm('추가 하시겠습니까?') ){
-              calendar.fullCalendar( 'renderEvent', {
-                // id: '01062610332',
-                resourceId: '01062610332',
-                title: title,
-                content: {
-                  title: title,
-                  location : location,
-                  happy: happy,
-                  satisfaction: satisfaction,
-                  depression : depression,
-                  anxiety: anxiety,
-                  anger: anger,
-                  fatigue: fatigue,
-                },
-                start: moment(start),
-                end: moment(end),
-                allDay: false,
-                color: getRandomColor(),
-                textColor: '#333',
-                overlap: false,
-              }, true);
+            $("#cancelAddBlockButton").click(function(e) {
+              console.log('cancel clicked');
+              $("#cancelAddBlockButton, #addBlockButton").off('click');
+              $("#addButton").removeClass('active');
+              isAdd = false;
+              // calendar.fullCalendar('option', 'selectable', false);
+            });
+
+            $("#addBlockButton").click( function(e) {
+              var location = $("#addBlockModal #locationSel input[type=radio]:checked").val();
+              var title = $("#addContent").val();
+              var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
+              var satisfaction = $("#addBlockModal #satisfactionSel input[type=radio]:checked").val();
+              var depression = $("#addBlockModal #depressionSel input[type=radio]:checked").val();
+              var anxiety = $("#addBlockModal #anxietySel input[type=radio]:checked").val();
+              var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
+              var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
+
+              if( confirm('추가 하시겠습니까?') ){
+                  calendar.fullCalendar( 'renderEvent', {
+                    // id: '01062610332',
+                    resourceId: '01062610332',
+                    title: title,
+                    content: {
+                      title: title,
+                      location : location,
+                      happy: happy,
+                      satisfaction: satisfaction,
+                      depression : depression,
+                      anxiety: anxiety,
+                      anger: anger,
+                      fatigue: fatigue,
+                    },
+                    start: moment(start),
+                    end: moment(end).add(10, 'minutes'),
+                    allDay: false,
+                    color: getRandomColor(),
+                    textColor: '#333',
+                    overlap: false,
+                  }, true);
+              }
+
+              console.log(calendar.fullCalendar( 'clientEvents' ))
+              $("#cancelAddBlockButton, #addBlockButton").off('click');
+              calendar.fullCalendar('option', 'selectable', false);
+              $("#addButton").removeClass('active');
+            });
           }
-
-          console.log(calendar.fullCalendar( 'clientEvents' ))
-          $("#cancelAddBlockButton, #addBlockButton").off('click');
-          calendar.fullCalendar('option', 'selectable', false);
+          else{
+            calendar.fullCalendar('unselect');
+          }
+          isAdd= false;
           $("#addButton").removeClass('active');
-        });
+        }, 500);
       }
-      else{
-        calendar.fullCalendar('unselect');
-      }
-
-    },
-    selectAllow: function(selectInfo) {
-      console.log(selectInfo);
     },
     snapDuration: "00:10:00",
   });
-
-  // $('#emotionSel').mobileSelect({
-  //   title: '감정 수준',
-  //   buttonSave: '확인',
-  //   buttonCancel: '취소',
-  //   animation: 'scale',
-  //   animationSpeed: 400,
-  //   onClose: function(){
-  //       $("#emotionContent").html($(this).val());
-  //   },
-  // });
-  //
-  // $('#locationSel').mobileSelect({
-  //   title: '장소',
-  //   buttonSave: '확인',
-  //   buttonCancel: '취소',
-  //   animation: 'scale',
-  //   animationSpeed: 100,
-  //   onClose: function(){
-  //       $("#locationContent").html($(this).val());
-  //   },
-  // });
 
   $("#dayDisplay").click( function(e) {
     calendar.fullCalendar('changeView', 'oneday');
@@ -250,13 +339,16 @@ $(document).ready(function() {
 
     if($(this).hasClass('active')){
       $(this).removeClass('active');
-      calendar.fullCalendar('option', 'selectable', false);
-
+      // calendar.fullCalendar('option', 'selectable', false);
+      isAdd = false;
+      $("#endMessage, #startMessage").slideUp();
     }
     else{
       $(this).addClass('active');
-      calendar.fullCalendar('option', 'selectable', true);
-      alert('시간을 선택해주세요(클릭 혹은 드래그)');
+      // calendar.fullCalendar('option', 'selectable', true);
+      isAdd = true;
+      $("#startMessage").slideDown();
+      start = null; end = null;
     }
   });
 

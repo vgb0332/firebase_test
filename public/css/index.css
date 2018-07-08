@@ -12,6 +12,11 @@ body {
   min-height: 100%;
   overflow: hidden;
 }
+
+.fc-ltr .fc-time-grid .fc-event-container {
+  margin: 0;
+}
+
 .check-container {
   height: 100%;
   min-height: 100%;
@@ -125,4 +130,12 @@ body {
 
 #locationEditButton.active, #emotionEditButton.active, #contentEditButton.active {
     opacity: 0.5;
+}
+
+#startMessage , #endMessage {
+  position: absolute;
+  /* bottom: 0; */
+  width: 100%;
+  opacity: 20000;
+  display: none;
 }

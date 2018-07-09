@@ -6,17 +6,37 @@ html, body {
   height: 100%;
 }
 html {
-  background: #444;
+  background-color: #A5D6A7;
+  /* height: 100%; */
 }
 body {
-  min-height: 100%;
+  /* height: 100%; */
   overflow: hidden;
 }
 
 .fc-ltr .fc-time-grid .fc-event-container {
   margin: 0;
 }
+.check-label-container {
+  height: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+  /* margin-top: 30px; */
+  padding: 10px 0 0 0;
+  border-bottom: 1px solid #dedede;
+}
 
+.label-button-wrap {
+  position: relative;
+  text-align: center;
+  top: 50%;
+  margin-top: -1.5em;
+  text-align: right;
+}
+
+.label-button-wrap label {
+  background-color: transparent;
+}
 .check-container {
   height: 100%;
   min-height: 100%;
@@ -128,7 +148,7 @@ body {
   display: none;
 }
 
-#locationEditButton.active, #emotionEditButton.active, #contentEditButton.active {
+#timeEditButton.active, #locationEditButton.active, #emotionEditButton.active, #contentEditButton.active {
     opacity: 0.5;
 }
 
@@ -136,6 +156,10 @@ body {
   position: absolute;
   /* bottom: 0; */
   width: 100%;
-  opacity: 20000;
   display: none;
+  z-index: 1000;
+}
+
+.modal-title span{
+  padding: 5px;
 }

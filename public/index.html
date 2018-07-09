@@ -28,7 +28,6 @@
   <script src="dependencies/ko.js"></script>
   <script src="dependencies/jquery.timepicker.min.js"></script>
 
-
   <script src="https://www.gstatic.com/firebasejs/5.1.0/firebase.js"></script>
   <script>
     // Initialize Firebase
@@ -78,7 +77,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">시간</h4>
+            <div style="font-size:15px; font-weight:bold;display:inline-block;" class="modal-title">시간</div>
           </div>
           <div class="modal-body">
             <div class="form-group">
@@ -110,12 +109,41 @@
               </div>
 
               <p style="font-weight: bold;">감정 수준</p>
+              <div class="check-label-container" id="selLabel">
+                  <div class="label-button-wrap">
+                    <!-- <span> 즐거움 </span> -->
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>없음</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
               <div class="check-container" id="happySel">
                   <div> 즐거움 </div>
                   <div class="button-wrap">
                     <!-- <span> 즐거움 </span> -->
                     <input class="hidden radio-label options" type="radio" name="happiness" id="happy-0" value="0" checked="checked"/>
-                    <label class="button-label" for="happy-0">
+                    <label style="margin-right: 0.8em;" class="button-label" for="happy-0">
                       <span>0</span>
                     </label>
                     <input class="hidden radio-label options" type="radio" name="happiness" id="happy-1" value="1"  />
@@ -145,7 +173,7 @@
                   <div class="button-wrap" style="margin-top:-2.5em;">
 
                     <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-0" value="0" checked="checked"/>
-                    <label class="button-label" for="satisfaction-0">
+                    <label style="margin-right: 0.8em;" class="button-label" for="satisfaction-0">
                       <span>0</span>
                     </label>
                     <input class="hidden radio-label options" type="radio" name="satisfaction" id="satisfaction-1" value="1" />
@@ -176,7 +204,7 @@
                   <div class="button-wrap">
 
                     <input class="hidden radio-label options" type="radio" name="depression" id="depression-0" value="0" checked="checked"/>
-                    <label class="button-label" for="depression-0">
+                    <label style="margin-right: 0.8em;" class="button-label" for="depression-0">
                       <span>0</span>
                     </label>
                     <input class="hidden radio-label options" type="radio" name="depression" id="depression-1" value="1"  />
@@ -207,7 +235,7 @@
                   <div class="button-wrap" style="margin-top:-2.5em;">
 
                     <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-0" value="0" checked="checked"/>
-                    <label class="button-label" for="anxiety-0">
+                    <label style="margin-right: 0.8em;" class="button-label" for="anxiety-0">
                       <span>0</span>
                     </label>
                     <input class="hidden radio-label options" type="radio" name="anxiety" id="anxiety-1" value="1" />
@@ -240,7 +268,7 @@
                 <div class="button-wrap">
 
                   <input class="hidden radio-label options" type="radio" name="anger" id="anger-0" value="0" checked="checked"/>
-                  <label class="button-label" for="anger-0">
+                  <label style="margin-right: 0.8em;" class="button-label" for="anger-0">
                     <span>0</span>
                   </label>
                   <input class="hidden radio-label options" type="radio" name="anger" id="anger-1" value="1" />
@@ -270,7 +298,7 @@
                 <span>피곤함/<br>힘듬</span>
                 <div class="button-wrap" style="margin-top:-2.5em;">
                   <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-0" value="0" checked="checked"/>
-                  <label class="button-label" for="fatigue-0">
+                  <label style="margin-right: 0.8em;" class="button-label" for="fatigue-0">
                     <span>0</span>
                   </label>
                   <input class="hidden radio-label options" type="radio" name="fatigue" id="fatigue-1" value="1" />
@@ -312,7 +340,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">시간</h4>
+
+            <div class="modal-title" style="font-size:15px; font-weight:bold;display:inline-block;">
+              <span id="startTime" class="start-time"></span> - <span id="endTime" class="end-time"></span>
+            </div>
+            <img style="display:inline-block;width:20px;" src="./images/add.png" alt="editButton" id="timeEditButton"></img>
+            <div class="time-picker"></div>
           </div>
           <div class="modal-body">
             <div class="form-group">
@@ -352,6 +385,35 @@
                 감정 수준
                 <img style="float:right;width:20px;" src="./images/add.png" alt="editButton" id="emotionEditButton"></img>
               </p>
+              <div class="check-label-container" id="selLabel2">
+                  <div class="label-button-wrap">
+                    <!-- <span> 즐거움 </span> -->
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>없음</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>1</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>2</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>3</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>4</span>
+                    </label>
+                    <input class="hidden radio-label options" type="radio" name="label" />
+                    <label class="button-label">
+                      <span>5</span>
+                    </label>
+                  </div>
+              </div>
               <div class="check-container" id="happyContent">
                   <div> 즐거움 </div>
                   <div class="button-wrap">

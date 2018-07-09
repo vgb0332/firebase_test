@@ -9,10 +9,7 @@ $(document).ready(function() {
     themeSystem: 'standard',
     defaultView: 'oneday',
     groupByResource: true,
-    // visibleRange: {
-    //   start: moment(),
-    //   end: moment().add('1', 'day'),
-    // },
+
     resources: [
       { id: '01062610332', title: '정용석' },
     ],
@@ -55,13 +52,8 @@ $(document).ready(function() {
     slotLabelFormat: 'a h:mm',
     nowIndicator: true,
     scrollTime: new Date().getHours()-1+':'+Math.floor(new Date().getMinutes()/10)*10+':'+new Date().getSeconds(),
-    // height: '1000',
-    height: 'parent',
-    aspectRatio: 1,
-    dragScroll : true,
-    header: {
-      // center: 'oneday,twoday,addEventButton',
-      right: '',
+    height: function() {
+      return $(window).outerHeight() - $(".fixed-top").height() - 10;
     },
     header: false,
     defaultDate: moment(),
@@ -85,7 +77,8 @@ $(document).ready(function() {
           totTime['total'] += diff;
         });
         console.log(totTime);
-        if(!event) {
+        console.log(events);
+        if(!events.length) {
           $("#spent-time-hm").html('-');
         }
         else {
@@ -116,9 +109,12 @@ $(document).ready(function() {
     eventClick: function(event, element) {
       if(isAdd) return false;
       $('#eventBlockModal').on('show.bs.modal', function () {
+        $('#startTime').timepicker('remove');
+        $('#endTime').timepicker('remove');
+
         var startDate = event.start.format('a h:mm');
         var endDate = event.end.format('a h:mm');
-        $("#contentEditButton, #locationEditButton, #emotionEditButton").removeClass('active');
+        $("#timeEditButton, #contentEditButton, #locationEditButton, #emotionEditButton").removeClass('active');
 
         $("#eventContent").attr('contenteditable', false);
         $('#locationContent input[type=radio]').prop('disabled', true);
@@ -129,7 +125,9 @@ $(document).ready(function() {
         $('#angerContent input[type=radio]').prop('disabled', true);
         $('#fatigueContent input[type=radio]').prop('disabled', true);
 
-        $("#eventBlockModal .modal-title").text(startDate + ' - ' + endDate);
+        // $("#eventBlockModal .modal-title").text(startDate + ' - ' + endDate);
+        $("#eventBlockModal .modal-title .start-time").text(startDate);
+        $("#eventBlockModal .modal-title .end-time").text(endDate);
         $('#eventBlockModal #eventContent').text(event.title);
 
         $('#eventBlockModal #locationContent input[type=radio][value=' + event.content.location + ']').attr("checked", true);
@@ -258,6 +256,22 @@ $(document).ready(function() {
               $("#addBlockModal .modal-title").text(moment(start).format('a hh:mm') + ' - ' + moment(end).add(10, 'minutes').format('a hh:mm'));
               $('#addBlockModal #addContent').focus()
             });
+
+            $('#addBlockModal').on('hidden.bs.modal', function () {
+              console.log('bye');
+              $("#locationSel input[type=radio]").removeAttr("checked");
+              $(".button-wrap input[type=radio]").removeAttr("checked");
+
+              $("#locationSel label:first").trigger('click');
+              $("#happySel label:first").trigger('click');
+              $("#satisfactionSel label:first").trigger('click');
+              $("#depressionSel label:first").trigger('click');
+              $("#anxietySel label:first").trigger('click');
+              $("#angerSel label:first").trigger('click');
+              $("#fatigueSel label:first").trigger('click');
+
+            });
+
             $("#addBlockModal").modal();
 
             $("#cancelAddBlockButton").click(function(e) {
@@ -345,7 +359,7 @@ $(document).ready(function() {
     }
     else{
       $(this).addClass('active');
-      // calendar.fullCalendar('option', 'selectable', true);
+      // calendar.fucontentEditButtonllCalendar('option', 'selectable', true);
       isAdd = true;
       $("#startMessage").slideDown();
       start = null; end = null;
@@ -355,7 +369,7 @@ $(document).ready(function() {
   $("#currentButton").click( function(e) {
     // $(".fc-scroller.fc-time-grid-container").scrollTop($('.fc-now-indicator').position().top - $(window).height() / 2);
     $(".fc-scroller.fc-time-grid-container").animate({
-      scrollTop: $('.fc-now-indicator').position().top - $(window).height() / 2
+      scrollTop: $('.fc-now-indicator').position().top - $("#calendar").height() / 2
     });
   });
 
@@ -367,6 +381,87 @@ $(document).ready(function() {
     var time = moment().format("a h:mm");
     $("#time").html( time );
   },60000);
+
+  $("#timeEditButton").click( function(e) {
+    console.log('please edit time');
+    if($(this).hasClass('active')){
+      $(this).removeClass('active');
+      $('#startTime').timepicker('remove');
+      $('#endTime').timepicker('remove');
+    }
+    else {
+      $(this).addClass('active');
+      var options = {
+        timeFormat: 'a h:i',
+        step: 10,
+        lang: {am: '오전', pm: '오후'},
+        useSelect: true,
+      };
+      // $('.modal-title .start-time, .end-time').css('border', '1px solid grey');
+      console.log(moment(currentEvent.start).format('a h:mm'));
+      var events = calendar.fullCalendar( 'clientEvents' );
+      //find the next closest event start time;
+      events.sort(function(a,b) {return a.start - b.start});
+      var target_index = -1;
+      $.each( events, function( index, event ) {
+        if(moment(event.start).isSame(moment(currentEvent.start))){
+          target_index = index;
+        }
+      })
+      console.log(target_index);
+      console.log(events[target_index]);
+
+
+      if(events.length === 0) {
+        options.minTime = undefined;
+        options.maxTime = undefined;
+      }
+      else if(events.length === 1){
+        options.minTime = undefined;
+        options.maxTime = undefined;
+      }
+      // else if(events.length === 2){
+      //   options.minTime = events[target_index-1] ? moment(events[target_index-1].start).format('a h:mm') : undefined;
+      //   options.maxTime = events[target_index+1] ? moment(events[target_index+1].start).format('a h:mm') : undefined;
+      // }
+      else {
+        options.minTime = events[target_index-1] ? moment(events[target_index-1].end).format('a h:mm') : undefined;
+        options.maxTime = events[target_index+1] ? moment(events[target_index+1].start).format('a h:mm') : undefined;
+      }
+
+      $('#startTime').val(moment(currentEvent.start).format('a h:mm'));
+      $('#endTime').val(moment(currentEvent.end).format('a h:mm'));
+
+      $('#startTime').timepicker(options);
+      $('#endTime').timepicker(options);
+
+      $('#endTime').timepicker('option', 'minTime', moment(currentEvent.start).format('a h:mm'));
+
+      $('#startTime').on('selectTime', function(e) {
+        var s_time = $('#startTime').timepicker('getTime');
+        var e_time = $('#endTime').timepicker('getTime');
+        console.log(s_time, e_time);
+        $('#startTime').text(moment(s_time).format('a h:mm'));
+        $('#startTime').val(s_time);
+
+        $('#endTime').text(moment(e_time).format('a h:mm'));
+        $('#endTime').val(e_time);
+
+        $('#endTime').timepicker('option', 'minTime', moment(s_time).format('a h:mm'));
+      })
+
+      $('#endTime').on('selectTime', function(e) {
+        var s_time = $('#startTime').timepicker('getTime');
+        var e_time = $('#endTime').timepicker('getTime');
+        $('#startTime').text(moment(s_time).format('a h:mm'));
+        $('#startTime').val(s_time);
+
+        $('#endTime').text(moment(e_time).format('a h:mm'));
+        $('#endTime').val(e_time);
+      })
+    }
+
+  });
 
   $("#contentEditButton").click( function(e) {
     if($(this).hasClass('active')){
@@ -415,6 +510,9 @@ $(document).ready(function() {
 
   $("#updateBlockButton").click ( function(e) {
     if( confirm('수정하시겠습니까?')) {
+      var start_time = $("#startTime").val();
+      var end_time = $("#endTime").val();
+      console.log(start_time, end_time);
       var location = $("#addBlockModal #locationSel input[type=radio]:checked").val();
       var title = $("#eventContent").text();
       var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
@@ -424,6 +522,8 @@ $(document).ready(function() {
       var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
       var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
 
+      currentEvent.start = moment(start_time);
+      currentEvent.end = moment(end_time);
       currentEvent.title = title;
       currentEvent.content.title = title;
       currentEvent.content.location = location;
@@ -435,6 +535,7 @@ $(document).ready(function() {
       currentEvent.content.fatigue = fatigue;
 
       calendar.fullCalendar( 'updateEvent', currentEvent );
+
 
       $("#eventBlockModal").modal('hide');
     }
@@ -452,8 +553,6 @@ $(document).ready(function() {
       $("#eventBlockModal").modal("hide");
     }
   });
-  console.log(calendar.fullCalendar( 'clientEvents' ))
-
 });
 
 

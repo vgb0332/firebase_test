@@ -7,7 +7,7 @@ $(document).ready(function() {
   calendar.fullCalendar({
     schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
     themeSystem: 'standard',
-    defaultView: 'oneday',
+    defaultView: 'firstday',
     groupByResource: true,
 
     resources: [
@@ -82,24 +82,40 @@ $(document).ready(function() {
           $("#spent-time-hm").html('-');
         }
         else {
+          var curHour = Math.floor(totTime[curDate] / 60).toFixed(0);
+          var curMin = (totTime[curDate]) % 60;
+
+          curHour = isNaN(curHour) ? 0 : curHour;
+          curMin = isNaN(curMin) ? 0 : curMin;
+
+          var totHour = Math.floor(totTime['total'] / 60).toFixed(0);
+          var totMin =  totTime['total'] % 60;
+
+          totHour = isNaN(totHour) ? 0 : totHour;
+          totMin = isNaN(totMin) ? 0 : totMin;
           $("#spent-time-hm").html(
-            type === 'oneday' ? Math.floor(totTime[curDate] / 60).toFixed(0) + '시간 ' + (totTime[curDate]) % 60 + '분' :
-                                Math.floor(totTime['total'] / 60).toFixed(0) + '시간 ' + totTime['total'] % 60 + '분'
+            type !== 'bothday' ? curHour  + '시간 ' + curMin + '분' :
+                                totHour + '시간 ' + totMin + '분'
           );
         }
 
 
         $("#remaining-time").html (
-          type === 'oneday' ? '/ 24시간' : '/ 48시간'
+          type !== 'bothday' ? '/ 24시간' : '/ 48시간'
         );
   	},
     views: {
-      oneday: {
+      firstday: {
         type: 'agenda',
         duration: { days: 1 },
         buttonText: '1일',
       },
-      twoday: {
+      secondday: {
+        type: 'agenda',
+        duration: { days: 1 },
+        buttonText: '1일',
+      },
+      bothday: {
         type: 'agenda',
         duration: { days: 2 },
         buttonText: '2일'
@@ -335,17 +351,17 @@ $(document).ready(function() {
   });
 
   $("#dayDisplay").click( function(e) {
-    calendar.fullCalendar('changeView', 'oneday');
+    calendar.fullCalendar('changeView', 'firstday');
     calendar.fullCalendar( 'gotoDate', moment() );
   });
 
   $("#nextdayDisplay").click( function(e) {
-    calendar.fullCalendar('changeView', 'oneday');
+    calendar.fullCalendar('changeView', 'secondday');
     calendar.fullCalendar( 'gotoDate', moment().add('1', 'day') );
   });
 
   $("#bothdayDisplay").click( function(e) {
-    calendar.fullCalendar('changeView', 'twoday');
+    calendar.fullCalendar('changeView', 'bothday');
     calendar.fullCalendar( 'gotoDate', moment() );
   });
 
@@ -409,17 +425,14 @@ $(document).ready(function() {
           target_index = index;
         }
       })
-      console.log(target_index);
-      console.log(events[target_index]);
-
 
       if(events.length === 0) {
-        options.minTime = undefined;
-        options.maxTime = undefined;
+        options.minTime = moment(event.start).startOf('day').toDate();
+        options.maxTime = moment(event.start).endOf('day').toDate();
       }
       else if(events.length === 1){
-        options.minTime = undefined;
-        options.maxTime = undefined;
+        options.minTime = moment(event.start).startOf('day').toDate();
+        options.maxTime = moment(event.start).endOf('day').toDate();
       }
       // else if(events.length === 2){
       //   options.minTime = events[target_index-1] ? moment(events[target_index-1].start).format('a h:mm') : undefined;
@@ -448,7 +461,13 @@ $(document).ready(function() {
         $('#endTime').text(moment(e_time).format('a h:mm'));
         $('#endTime').val(e_time);
 
-        $('#endTime').timepicker('option', 'minTime', moment(s_time).format('a h:mm'));
+        if(moment(s_time).isAfter(moment(e_time)) || moment(s_time).isSame(moment(e_time))){
+          console.log('after');
+          $("#endTime").text(moment(s_time).add(10, 'minutes').format('a h:mm'));
+          $("#endTime").val(moment(s_time).add(10, 'minutes').toDate());
+        }
+        $('#endTime').timepicker('option', 'minTime', moment(s_time).add(10, 'minutes').format('a h:mm'));
+
       })
 
       $('#endTime').on('selectTime', function(e) {
@@ -511,9 +530,10 @@ $(document).ready(function() {
 
   $("#updateBlockButton").click ( function(e) {
     if( confirm('수정하시겠습니까?')) {
+      var view = calendar.fullCalendar('getView');
+      console.log(view);
       var start_time = $("#startTime").val();
       var end_time = $("#endTime").val();
-      console.log(start_time, end_time);
       var location = $("#addBlockModal #locationSel input[type=radio]:checked").val();
       var title = $("#eventContent").text();
       var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
@@ -523,8 +543,8 @@ $(document).ready(function() {
       var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
       var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
 
-      currentEvent.start = moment(start_time);
-      currentEvent.end = moment(end_time);
+      currentEvent.start = view.type === 'secondday' ? moment(start_time).add(1,'days') : moment(start_time);
+      currentEvent.end = view.type === 'secondday' ? moment(end_time).add(1,'days') : moment(end_time);
       currentEvent.title = title;
       currentEvent.content.title = title;
       currentEvent.content.location = location;

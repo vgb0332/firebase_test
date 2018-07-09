@@ -262,6 +262,7 @@ $(document).ready(function() {
               $("#locationSel input[type=radio]").removeAttr("checked");
               $(".button-wrap input[type=radio]").removeAttr("checked");
 
+              $("#addContent").val("");
               $("#locationSel label:first").trigger('click');
               $("#happySel label:first").trigger('click');
               $("#satisfactionSel label:first").trigger('click');

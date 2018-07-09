@@ -109,3 +109,11 @@ body {
 .hidden {
   display: none;
 }
+
+.form-group input[type=text] {
+  text-align: center;
+}
+
+.form-group input[type=text]::placeholder {
+  text-align: center;
+}

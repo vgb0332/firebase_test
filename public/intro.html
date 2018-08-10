@@ -348,67 +348,132 @@
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q14. 본인의 재학상태는?
+        Q14. 본인의 학력 경로는? (해당되는 과정을 모두 기입해주세요. 본인 학력에 해당 사항이 없는 과정은 비워두세요)
       </p>
       <div class="button-wrap" style="text-align: center;">
-        <input class="hidden radio-label" type="radio" name="question14" id="question14_1" value="1"/>
-        <label class="button-label" for="question14_1">
-          <span>(1) 졸업</span>
+        <p class="sub-question">가. 고졸 이하: </p>
+        <input class="hidden radio-label" type="radio" name="question14_a" id="question14_a_1" value="1"/>
+        <label class="button-label" for="question14_a_1">
+          <span>(1) 예</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question14" id="question14_2" value="2"/>
-        <label class="button-label" for="question14_2">
-          <span>(2) 자퇴, 퇴학</span>
+        <input class="hidden radio-label" type="radio" name="question14_a" id="question14_a_2" value="2"/>
+        <label class="button-label" for="question14_a_2">
+          <span>(2) 아니오</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question14" id="question14_3" value="3"/>
-        <label class="button-label" for="question14_3">
-          <span>(3) 휴학</span>
+
+        <p class="sub-question">나. 2~3년제 대학교 : </p>
+        <input class="hidden radio-label" type="radio" name="question14_b" id="question14_b_1" value="1"/>
+        <label class="button-label" for="question14_b_1">
+          <span>(1) 자퇴/퇴학</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question14" id="question14_4" value="4"/>
-        <label class="button-label" for="question14_4">
-          <span>(4) 수료</span>
+        <input class="hidden radio-label" type="radio" name="question14_b" id="question14_b_2" value="2"/>
+        <label class="button-label" for="question14_b_2">
+          <span>(2) 휴학</span>
         </label>
+        <input class="hidden radio-label" type="radio" name="question14_b" id="question14_b_3" value="3"/>
+        <label class="button-label" for="question14_b_3">
+          <span>(3) 수료</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_b" id="question14_b_4" value="4"/>
+        <label class="button-label" for="question14_b_4">
+          <span>(4) 졸업</span>
+        </label>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_b" id="question14_b_5" placeholder="출신학교">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_b" id="question14_b_6" placeholder="출신학과">
+        </div>
+
+        <p class="sub-question">다. 4년제 대학교 : </p>
+        <input class="hidden radio-label" type="radio" name="question14_c" id="question14_c_1" value="1"/>
+        <label class="button-label" for="question14_c_1">
+          <span>(1) 자퇴/퇴학</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_c" id="question14_c_2" value="2"/>
+        <label class="button-label" for="question14_c_2">
+          <span>(2) 휴학</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_c" id="question14_c_3" value="3"/>
+        <label class="button-label" for="question14_c_3">
+          <span>(3) 수료</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_c" id="question14_c_4" value="4"/>
+        <label class="button-label" for="question14_c_4">
+          <span>(4) 졸업</span>
+        </label>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_c" id="question14_c_5" placeholder="출신학교">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_c" id="question14_c_6" placeholder="출신학과">
+        </div>
+
+
+        <p class="sub-question">라. 대학원(석사) : </p>
+        <input class="hidden radio-label" type="radio" name="question14_d" id="question14_d_1" value="1"/>
+        <label class="button-label" for="question14_d_1">
+          <span>(1) 자퇴/퇴학</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_d" id="question14_d_2" value="2"/>
+        <label class="button-label" for="question14_d_2">
+          <span>(2) 휴학</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_d" id="question14_d_3" value="3"/>
+        <label class="button-label" for="question14_d_3">
+          <span>(3) 수료</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_d" id="question14_d_4" value="4"/>
+        <label class="button-label" for="question14_d_4">
+          <span>(4) 졸업</span>
+        </label>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_d" id="question14_d_5" placeholder="출신학교">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_d" id="question14_d_6" placeholder="출신학과">
+        </div>
+
+        <p class="sub-question">마.대학원(박사) : </p>
+        <input class="hidden radio-label" type="radio" name="question14_e" id="question14_e_1" value="1"/>
+        <label class="button-label" for="question14_e_1">
+          <span>(1) 자퇴/퇴학</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_d" id="question14_e_2" value="2"/>
+        <label class="button-label" for="question14_e_2">
+          <span>(2) 휴학</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_d" id="question14_e_3" value="3"/>
+        <label class="button-label" for="question14_e_3">
+          <span>(3) 수료</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question14_d" id="question14_e_4" value="4"/>
+        <label class="button-label" for="question14_e_4">
+          <span>(4) 졸업</span>
+        </label>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_e" id="question14_e_5" placeholder="출신학교">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" name="question14_e" id="question14_e_6" placeholder="출신학과">
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="check-container" style="border:0">
+      <p class="question">
+        Q15. 본인의 최종학력 출신학교명은?
+      </p>
+      <div class="form-group">
+        <input type="text" class="form-control" id="question15" placeholder="직접기입">
       </div>
     </div>
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q15. 본인의 최종 교육수준은?
-      </p>
-      <div class="button-wrap" style="text-align: center;">
-        <input class="hidden radio-label" type="radio" name="question15" id="question15_1" value="1"/>
-        <label class="button-label" for="question15_1">
-          <span>(1) 무학</span>
-        </label>
-        <input class="hidden radio-label" type="radio" name="question15" id="question15_2" value="2"/>
-        <label class="button-label" for="question15_2">
-          <span>(2) 중학교 </span>
-        </label>
-        <input class="hidden radio-label" type="radio" name="question15" id="question15_3" value="3"/>
-        <label class="button-label" for="question15_3">
-          <span>(3) 고등학교 </span>
-        </label>
-        <input class="hidden radio-label" type="radio" name="question15" id="question15_4" value="4"/>
-        <label class="button-label" for="question15_4">
-          <span>(4) 전문대학교 </span>
-        </label>
-        <input class="hidden radio-label" type="radio" name="question15" id="question15_5" value="5"/>
-        <label class="button-label" for="question15_5">
-          <span>(5) 대학교</span>
-        </label>
-        <input class="hidden radio-label" type="radio" name="question15" id="question15_6" value="6"/>
-        <label class="button-label" for="question15_6">
-          <span>(6) 석사</span>
-        </label>
-        <input class="hidden radio-label" type="radio" name="question15" id="question15_7" value="7"/>
-        <label class="button-label" for="question15_7">
-          <span>(7) 박사</span>
-        </label>
-      </div>
-    </div>
-
-    <div class="check-container" style="border:0">
-      <p class="question">
-        Q16. 본인의 최종학력 출신학교명은?
+        Q16. 본인의 최종학력 출신학과는?
       </p>
       <div class="form-group">
         <input type="text" class="form-control" id="question16" placeholder="직접기입">
@@ -417,16 +482,17 @@
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q17. 본인의 최종학력 출신학과는?
+        Q17. 어린이집 혹은 유치원 또는 다른 직종을 포함한 직장 근무 기간은?
       </p>
-      <div class="form-group">
-        <input type="text" class="form-control" id="question17" placeholder="직접기입">
+      <div class="form-group" style="display:flex;">
+        <input type="text" class="form-control" id="question17_1" placeholder="년">
+        <input type="text" class="form-control" id="question17_2" placeholder="월">
       </div>
     </div>
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q18. 어린이집 혹은 유치원 또는 다른 직종을 포함한 직장 근무 기간은?
+        Q18. 어린이집 혹은 유치원에 근무한 기간은?
       </p>
       <div class="form-group" style="display:flex;">
         <input type="text" class="form-control" id="question18_1" placeholder="년">
@@ -436,7 +502,7 @@
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q19. 어린이집 혹은 유치원에 근무한 기간은?
+        Q19. 현재 근무 중인 어린이집 혹은 유치원에 근무한 기간은?
       </p>
       <div class="form-group" style="display:flex;">
         <input type="text" class="form-control" id="question19_1" placeholder="년">
@@ -446,33 +512,23 @@
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q20. 현재 근무 중인 어린이집 혹은 유치원에 근무한 기간은?
-      </p>
-      <div class="form-group" style="display:flex;">
-        <input type="text" class="form-control" id="question20_1" placeholder="년">
-        <input type="text" class="form-control" id="question20_2" placeholder="월">
-      </div>
-    </div>
-
-    <div class="check-container" style="border:0">
-      <p class="question">
-        Q21. 결혼유무?
+        Q20. 결혼유무?
       </p>
       <div class="button-wrap" style="text-align: center;">
-        <input class="hidden radio-label" type="radio" name="question21" id="question21_1" value="1"/>
-        <label class="button-label" for="question21_1">
+        <input class="hidden radio-label" type="radio" name="question20" id="question20_1" value="1"/>
+        <label class="button-label" for="question20_1">
           <span>(1) 미혼 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question21" id="question21_2" value="2"/>
-        <label class="button-label" for="question21_2">
+        <input class="hidden radio-label" type="radio" name="question20" id="question20_2" value="2"/>
+        <label class="button-label" for="question20_2">
           <span>(2) 기혼 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question21" id="question21_3" value="3"/>
-        <label class="button-label" for="question21_3">
+        <input class="hidden radio-label" type="radio" name="question20" id="question20_3" value="3"/>
+        <label class="button-label" for="question20_3">
           <span>(3) 이혼, 별거</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question21" id="question21_4" value="4"/>
-        <label class="button-label" for="question21_4">
+        <input class="hidden radio-label" type="radio" name="question20" id="question20_4" value="4"/>
+        <label class="button-label" for="question20_4">
           <span>(4) 사별</span>
         </label>
       </div>
@@ -480,27 +536,27 @@
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q22. 자녀 숫자?
+        Q21. 자녀 숫자?
       </p>
       <div class="button-wrap" style="text-align: center;">
-        <input class="hidden radio-label" type="radio" name="question22" id="question22_1" value="1"/>
+        <input class="hidden radio-label" type="radio" name="question21" id="question21_1" value="1"/>
         <label class="button-label" for="question22_1">
           <span>(1) 0 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question22_2" value="2"/>
-        <label class="button-label" for="question22_2">
+        <input class="hidden radio-label" type="radio" name="question21" id="question21_2" value="2"/>
+        <label class="button-label" for="question21_2">
           <span>(2) 1 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question22_3" value="3"/>
-        <label class="button-label" for="question22_3">
+        <input class="hidden radio-label" type="radio" name="question21" id="question21_3" value="3"/>
+        <label class="button-label" for="question21_2">
           <span>(3) 2</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question22_4" value="4"/>
-        <label class="button-label" for="question22_4">
+        <input class="hidden radio-label" type="radio" name="question21" id="question21_4" value="4"/>
+        <label class="button-label" for="question21_2">
           <span>(4) 3</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question22_5" value="5"/>
-        <label class="button-label" for="question22_5">
+        <input class="hidden radio-label" type="radio" name="question21" id="question21_5" value="5"/>
+        <label class="button-label" for="question21_2">
           <span>(5) 3명 이상</span>
         </label>
       </div>
@@ -508,33 +564,33 @@
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q23. 자녀 중 가장 나이가 많은 자녀의 나이는?:
+        Q22. 자녀 중 가장 나이가 많은 자녀의 나이는?:
       </p>
       <div class="form-group">
-        <input type="text" class="form-control" id="question23" placeholder="직접기입">
+        <input type="text" class="form-control" name="question22" id="question22" placeholder="직접기입">
       </div>
     </div>
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q24. 본인을 포함하여, 집에 같이 거주 중인 사람 수는?
+        Q23. 본인을 포함하여, 집에 같이 거주 중인 사람 수는?
       </p>
       <div class="form-group">
-        <input type="text" class="form-control" id="question24" placeholder="직접기입">
+        <input type="text" class="form-control" name="question23" id="question23" placeholder="직접기입">
       </div>
     </div>
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q25. 배우자의 근로 여부? (배우자가 존재하지 않는 경우 아니오를 선택해주세요)
+        Q24. 배우자의 근로 여부? (배우자가 존재하지 않는 경우 아니오를 선택해주세요)
       </p>
       <div class="button-wrap" style="text-align: center;">
-        <input class="hidden radio-label" type="radio" name="question25" id="question25_1" value="1"/>
-        <label class="button-label" for="question25_1">
+        <input class="hidden radio-label" type="radio" name="question24" id="question24_1" value="1"/>
+        <label class="button-label" for="question24_1">
           <span>(1) 예 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question25" id="question25_2" value="2"/>
-        <label class="button-label" for="question25_2">
+        <input class="hidden radio-label" type="radio" name="question24" id="question24_2" value="2"/>
+        <label class="button-label" for="question24_2">
           <span>(2) 아니오 </span>
         </label>
       </div>
@@ -542,44 +598,68 @@
 
     <div class="check-container" style="border:0">
       <p class="question">
-        Q26. 지난 1년간 월평균 총 가구소득은?
+        Q25. 지난 1년간 월평균 총 가구소득은?
       </p>
       <div class="button-wrap" style="text-align: center;">
-        <input class="hidden radio-label" type="radio" name="question26" id="question26_1" value="1"/>
-        <label class="button-label" for="question26_1">
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_1" value="1"/>
+        <label class="button-label" for="question25_1">
           <span>(1) 50만원 미만 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_2" value="2"/>
-        <label class="button-label" for="question26_2">
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_2" value="2"/>
+        <label class="button-label" for="question25_2">
           <span>(2) 50-100만원 미만 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_3" value="3"/>
-        <label class="button-label" for="question26_3">
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_3" value="3"/>
+        <label class="button-label" for="question25_3">
           <span>(3) 100-150만원 미만</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_4" value="4"/>
-        <label class="button-label" for="question26_4">
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_4" value="4"/>
+        <label class="button-label" for="question25_4">
           <span>(4) 150-200만원</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_5" value="5"/>
-        <label class="button-label" for="question26_5">
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_5" value="5"/>
+        <label class="button-label" for="question25_5">
           <span>(5) 200-250만원</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_6" value="6"/>
-        <label class="button-label" for="question26_6">
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_6" value="6"/>
+        <label class="button-label" for="question25_6">
           <span>(6) 250-300만원 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_7" value="7"/>
-        <label class="button-label" for="question26_7">
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_7" value="7"/>
+        <label class="button-label" for="question25_7">
           <span>(7) 350-400만원 </span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_8" value="8"/>
-        <label class="button-label" for="question26_8">
-          <span>(8) 450-500만원 미만 </span>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_8" value="8"/>
+        <label class="button-label" for="question25_8">
+          <span>(8) 450-500만원</span>
         </label>
-        <input class="hidden radio-label" type="radio" name="question22" id="question26_9" value="9"/>
-        <label class="button-label" for="question26_9">
-          <span>(9) 500만원 이상</span>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_9" value="9"/>
+        <label class="button-label" for="question25_9">
+          <span>(9) 500~550만원</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_10" value="10"/>
+        <label class="button-label" for="question25_10">
+          <span>(9) 550~600만원</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_11" value="11"/>
+        <label class="button-label" for="question25_11">
+          <span>(9) 600~650만원</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_12" value="12"/>
+        <label class="button-label" for="question25_12">
+          <span>(9) 650~700만원</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_13" value="13"/>
+        <label class="button-label" for="question25_13">
+          <span>(9) 700~750만원</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_14" value="14"/>
+        <label class="button-label" for="question25_14">
+          <span>(9) 750~800만원</span>
+        </label>
+        <input class="hidden radio-label" type="radio" name="question25" id="question25_15" value="15"/>
+        <label class="button-label" for="question25_15">
+          <span>(9) 800만원 이상</span>
         </label>
       </div>
     </div>

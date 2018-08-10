@@ -10,6 +10,14 @@
   font-weight: bold;
 }
 
+.sub-question {
+  text-align: left;
+  font-weight: bold;
+}
+
+#eventContent {
+  min-height: 20px;
+}
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400,900);
 * {
   box-sizing: border-box;

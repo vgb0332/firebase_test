@@ -1,5 +1,4 @@
 $(document).ready(function() {
-  console.log(new Date().getHours()-1+':'+Math.floor(new Date().getMinutes()/10)*10+':'+new Date().getSeconds());
   var start, end;
   var calendar = $("#calendar, #calendar-nextday");
   var currentEvent;
@@ -9,44 +8,9 @@ $(document).ready(function() {
     themeSystem: 'standard',
     defaultView: 'firstday',
     groupByResource: true,
-
     resources: [
       { id: '01062610332', title: '정용석' },
     ],
-    // events: [
-    //   {
-    //     // id: '01062610332',
-    //     resourceId: '01062610332',
-    //     title  : 'event1',
-    //     content: {
-    //       emotion : 'emotion',
-    //       location : 'location',
-    //     },
-    //     start  : moment(),
-    //     end: moment().add(30, 'minutes'),
-    //     allDay: false,
-    //     color: getRandomColor(),
-    //     textColor: '#333',
-    //     overlap: false,
-    //     // allDay : false // will make the time show
-    //   },
-    //   {
-    //     // id: '01062610332',
-    //     resourceId: '01062610332',
-    //     title  : 'event2',
-    //     content: {
-    //       emotion : 'emotion2',
-    //       location : 'location2',
-    //     },
-    //     start  : moment().add(30, 'minutes'),
-    //     end: moment().add(60, 'minutes'),
-    //     allDay: false,
-    //     color: getRandomColor(),
-    //     textColor: '#333',
-    //     overlap: false,
-    //     // allDay : false // will make the time show
-    //   },
-    // ],
     allDaySlot: false,
     slotDuration: '00:10:00',
     slotLabelFormat: 'a h:mm',
@@ -57,6 +21,16 @@ $(document).ready(function() {
     },
     header: false,
     defaultDate: moment(),
+    eventRender: function(event, element) {
+      console.log('over here!!!!!!1');
+      console.log(element, event);
+      var minutes = moment.duration(event.end.diff(event.start)).get("minutes");
+      if(minutes === 10) {
+        $(element).find('.fc-time').text( event.title);
+        $(element).find('.fc-title').remove();
+      }
+      console.log(moment.duration(event.end.diff(event.start)).get("minutes"));
+    },
     viewRender: function(view) {
         var title = view.title;
         $("#title").html( title );
@@ -76,8 +50,7 @@ $(document).ready(function() {
           totTime[date] += diff;
           totTime['total'] += diff;
         });
-        console.log(totTime);
-        console.log(events);
+
         if(!events.length) {
           $("#spent-time-hm").html('-');
         }
@@ -130,16 +103,16 @@ $(document).ready(function() {
 
         var startDate = event.start.format('a h:mm');
         var endDate = event.end.format('a h:mm');
-        $("#timeEditButton, #contentEditButton, #locationEditButton, #emotionEditButton").removeClass('active');
+        // $("#timeEditButton, #contentEditButton, #locationEditButton, #emotionEditButton").removeClass('active');
 
-        $("#eventContent").attr('contenteditable', false);
-        $('#locationContent input[type=radio]').prop('disabled', true);
-        $('#happyContent input[type=radio]').prop('disabled', true);
-        $('#satisfactionContent input[type=radio]').prop('disabled', true);
-        $('#depressionContent input[type=radio]').prop('disabled', true);
-        $('#anxietyContent input[type=radio]').prop('disabled', true);
-        $('#angerContent input[type=radio]').prop('disabled', true);
-        $('#fatigueContent input[type=radio]').prop('disabled', true);
+        $("#eventContent").attr('contenteditable', true);
+        $('#locationContent input[type=radio]').prop('disabled', false);
+        $('#happyContent input[type=radio]').prop('disabled', false);
+        $('#satisfactionContent input[type=radio]').prop('disabled', false);
+        $('#agitationContent input[type=radio]').prop('disabled', false);
+        $('#anxietyContent input[type=radio]').prop('disabled', false);
+        $('#angerContent input[type=radio]').prop('disabled', false);
+        $('#fatigueContent input[type=radio]').prop('disabled', false);
 
         // $("#eventBlockModal .modal-title").text(startDate + ' - ' + endDate);
         $("#eventBlockModal .modal-title .start-time").text(startDate);
@@ -149,10 +122,82 @@ $(document).ready(function() {
         $('#eventBlockModal #locationContent input[type=radio][value=' + event.content.location + ']').attr("checked", true);
         $('#eventBlockModal #happyContent input[type=radio][value=' + event.content.happy + ']').attr("checked", true);
         $('#eventBlockModal #satisfactionContent input[type=radio][value=' + event.content.satisfaction + ']').attr("checked", true);
-        $('#eventBlockModal #depressionContent input[type=radio][value=' + event.content.depression + ']').attr("checked", true);
+        $('#eventBlockModal #agitationContent input[type=radio][value=' + event.content.agitation + ']').attr("checked", true);
         $('#eventBlockModal #anxietyContent input[type=radio][value=' + event.content.anxiety + ']').attr("checked", true);
         $('#eventBlockModal #angerContent input[type=radio][value=' + event.content.anger + ']').attr("checked", true);
         $('#eventBlockModal #fatigueContent input[type=radio][value=' + event.content.fatigue + ']').attr("checked", true);
+
+        var options = {
+          timeFormat: 'a h:i',
+          step: 10,
+          lang: {am: '오전', pm: '오후'},
+          useSelect: true,
+        };
+        // $('.modal-title .start-time, .end-time').css('border', '1px solid grey');
+        console.log(moment(event.start).format('a h:mm'));
+        var events = calendar.fullCalendar( 'clientEvents' );
+        //find the next closest event start time;
+        events.sort(function(a,b) {return a.start - b.start});
+        var target_index = -1;
+        $.each( events, function( index, event ) {
+          if(moment(event.start).isSame(moment(event.start))){
+            target_index = index;
+          }
+        })
+
+        if(events.length === 0) {
+          options.minTime = moment(event.start).startOf('day').toDate();
+          options.maxTime = moment(event.start).endOf('day').toDate();
+        }
+        else if(events.length === 1){
+          options.minTime = moment(event.start).startOf('day').toDate();
+          options.maxTime = moment(event.start).endOf('day').toDate();
+        }
+        // else if(events.length === 2){
+        //   options.minTime = events[target_index-1] ? moment(events[target_index-1].start).format('a h:mm') : undefined;
+        //   options.maxTime = events[target_index+1] ? moment(events[target_index+1].start).format('a h:mm') : undefined;
+        // }
+        else {
+          options.minTime = events[target_index-1] ? moment(events[target_index-1].end).format('a h:mm') : undefined;
+          options.maxTime = events[target_index+1] ? moment(events[target_index+1].start).format('a h:mm') : undefined;
+        }
+
+        $('#startTime').val(moment(event.start).format('a h:mm'));
+        $('#endTime').val(moment(event.end).format('a h:mm'));
+
+        $('#startTime').timepicker(options);
+        $('#endTime').timepicker(options);
+
+        $('#endTime').timepicker('option', 'minTime', moment(event.start).format('a h:mm'));
+
+        $('#startTime').on('selectTime', function(e) {
+          var s_time = $('#startTime').timepicker('getTime');
+          var e_time = $('#endTime').timepicker('getTime');
+          console.log(s_time, e_time);
+          $('#startTime').text(moment(s_time).format('a h:mm'));
+          $('#startTime').val(s_time);
+
+          $('#endTime').text(moment(e_time).format('a h:mm'));
+          $('#endTime').val(e_time);
+
+          if(moment(s_time).isAfter(moment(e_time)) || moment(s_time).isSame(moment(e_time))){
+            console.log('after');
+            $("#endTime").text(moment(s_time).add(10, 'minutes').format('a h:mm'));
+            $("#endTime").val(moment(s_time).add(10, 'minutes').toDate());
+          }
+          $('#endTime').timepicker('option', 'minTime', moment(s_time).add(10, 'minutes').format('a h:mm'));
+
+        })
+
+        $('#endTime').on('selectTime', function(e) {
+          var s_time = $('#startTime').timepicker('getTime');
+          var e_time = $('#endTime').timepicker('getTime');
+          $('#startTime').text(moment(s_time).format('a h:mm'));
+          $('#startTime').val(s_time);
+
+          $('#endTime').text(moment(e_time).format('a h:mm'));
+          $('#endTime').val(e_time);
+        })
       });
 
       $("#eventBlockModal").modal();
@@ -160,75 +205,8 @@ $(document).ready(function() {
 
     },
     selectHelper: true,
-    // longPressDelay : 10,
     selectOverlap: false,
     eventOverlap: false,
-    // select: function( start, end ) {
-    //   var startDate = start.format('a h:mm');
-    //   var endDate = end.format('a h:mm');
-    //   if(confirm('시간: ' + startDate + ' ~ ' + endDate + '\n계속 진행하시겠습니까?')){
-    //     // var startDate = start.format('a h:mm');
-    //     // var endDate = end.format('a h:mm');
-    //     // calendar.fullCalendar('option', 'unselectAuto', true);
-    //
-    //     $('#addBlockModal').on('show.bs.modal', function () {
-    //       $("#addBlockModal .modal-title").text(startDate + ' - ' + endDate);
-    //       $('#addBlockModal #addContent').focus()
-    //     });
-    //     $("#addBlockModal").modal();
-    //
-    //     $("#cancelAddBlockButton").click(function(e) {
-    //       console.log('cancel clicked');
-    //       $("#cancelAddBlockButton, #addBlockButton").off('click');
-    //       $("#addButton").removeClass('active');
-    //       calendar.fullCalendar('option', 'selectable', false);
-    //     });
-    //
-    //     $("#addBlockButton").click( function(e) {
-    //       var location = $("#addBlockModal #locationSel input[type=radio]:checked").val();
-    //       var title = $("#addContent").val();
-    //       var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
-    //       var satisfaction = $("#addBlockModal #satisfactionSel input[type=radio]:checked").val();
-    //       var depression = $("#addBlockModal #depressionSel input[type=radio]:checked").val();
-    //       var anxiety = $("#addBlockModal #anxietySel input[type=radio]:checked").val();
-    //       var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
-    //       var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
-    //
-    //       if( confirm('추가 하시겠습니까?') ){
-    //           calendar.fullCalendar( 'renderEvent', {
-    //             // id: '01062610332',
-    //             resourceId: '01062610332',
-    //             title: title,
-    //             content: {
-    //               title: title,
-    //               location : location,
-    //               happy: happy,
-    //               satisfaction: satisfaction,
-    //               depression : depression,
-    //               anxiety: anxiety,
-    //               anger: anger,
-    //               fatigue: fatigue,
-    //             },
-    //             start: moment(start),
-    //             end: moment(end),
-    //             allDay: false,
-    //             color: getRandomColor(),
-    //             textColor: '#333',
-    //             overlap: false,
-    //           }, true);
-    //       }
-    //
-    //       console.log(calendar.fullCalendar( 'clientEvents' ))
-    //       $("#cancelAddBlockButton, #addBlockButton").off('click');
-    //       calendar.fullCalendar('option', 'selectable', false);
-    //       $("#addButton").removeClass('active');
-    //     });
-    //   }
-    //   else{
-    //     calendar.fullCalendar('unselect');
-    //   }
-    //
-    // },
     dayClick : function(date, jsEvent, view) {
       if(!isAdd) return false;
       console.log('dayclick', date, jsEvent, view);
@@ -282,7 +260,7 @@ $(document).ready(function() {
               $("#locationSel label:first").trigger('click');
               $("#happySel label:first").trigger('click');
               $("#satisfactionSel label:first").trigger('click');
-              $("#depressionSel label:first").trigger('click');
+              $("#agitationSel label:first").trigger('click');
               $("#anxietySel label:first").trigger('click');
               $("#angerSel label:first").trigger('click');
               $("#fatigueSel label:first").trigger('click');
@@ -304,7 +282,7 @@ $(document).ready(function() {
               var title = $("#addContent").val();
               var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
               var satisfaction = $("#addBlockModal #satisfactionSel input[type=radio]:checked").val();
-              var depression = $("#addBlockModal #depressionSel input[type=radio]:checked").val();
+              var agitation = $("#addBlockModal #agitationSel input[type=radio]:checked").val();
               var anxiety = $("#addBlockModal #anxietySel input[type=radio]:checked").val();
               var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
               var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
@@ -319,7 +297,7 @@ $(document).ready(function() {
                       location : location,
                       happy: happy,
                       satisfaction: satisfaction,
-                      depression : depression,
+                      agitation : agitation,
                       anxiety: anxiety,
                       anger: anger,
                       fatigue: fatigue,
@@ -399,166 +377,101 @@ $(document).ready(function() {
     $("#time").html( time );
   },60000);
 
-  $("#timeEditButton").click( function(e) {
-    console.log('please edit time');
-    if($(this).hasClass('active')){
-      $(this).removeClass('active');
-      $('#startTime').timepicker('remove');
-      $('#endTime').timepicker('remove');
-    }
-    else {
-      $(this).addClass('active');
-      var options = {
-        timeFormat: 'a h:i',
-        step: 10,
-        lang: {am: '오전', pm: '오후'},
-        useSelect: true,
-      };
-      // $('.modal-title .start-time, .end-time').css('border', '1px solid grey');
-      console.log(moment(currentEvent.start).format('a h:mm'));
-      var events = calendar.fullCalendar( 'clientEvents' );
-      //find the next closest event start time;
-      events.sort(function(a,b) {return a.start - b.start});
-      var target_index = -1;
-      $.each( events, function( index, event ) {
-        if(moment(event.start).isSame(moment(currentEvent.start))){
-          target_index = index;
-        }
-      })
-
-      if(events.length === 0) {
-        options.minTime = moment(event.start).startOf('day').toDate();
-        options.maxTime = moment(event.start).endOf('day').toDate();
-      }
-      else if(events.length === 1){
-        options.minTime = moment(event.start).startOf('day').toDate();
-        options.maxTime = moment(event.start).endOf('day').toDate();
-      }
-      // else if(events.length === 2){
-      //   options.minTime = events[target_index-1] ? moment(events[target_index-1].start).format('a h:mm') : undefined;
-      //   options.maxTime = events[target_index+1] ? moment(events[target_index+1].start).format('a h:mm') : undefined;
-      // }
-      else {
-        options.minTime = events[target_index-1] ? moment(events[target_index-1].end).format('a h:mm') : undefined;
-        options.maxTime = events[target_index+1] ? moment(events[target_index+1].start).format('a h:mm') : undefined;
-      }
-
-      $('#startTime').val(moment(currentEvent.start).format('a h:mm'));
-      $('#endTime').val(moment(currentEvent.end).format('a h:mm'));
-
-      $('#startTime').timepicker(options);
-      $('#endTime').timepicker(options);
-
-      $('#endTime').timepicker('option', 'minTime', moment(currentEvent.start).format('a h:mm'));
-
-      $('#startTime').on('selectTime', function(e) {
-        var s_time = $('#startTime').timepicker('getTime');
-        var e_time = $('#endTime').timepicker('getTime');
-        console.log(s_time, e_time);
-        $('#startTime').text(moment(s_time).format('a h:mm'));
-        $('#startTime').val(s_time);
-
-        $('#endTime').text(moment(e_time).format('a h:mm'));
-        $('#endTime').val(e_time);
-
-        if(moment(s_time).isAfter(moment(e_time)) || moment(s_time).isSame(moment(e_time))){
-          console.log('after');
-          $("#endTime").text(moment(s_time).add(10, 'minutes').format('a h:mm'));
-          $("#endTime").val(moment(s_time).add(10, 'minutes').toDate());
-        }
-        $('#endTime').timepicker('option', 'minTime', moment(s_time).add(10, 'minutes').format('a h:mm'));
-
-      })
-
-      $('#endTime').on('selectTime', function(e) {
-        var s_time = $('#startTime').timepicker('getTime');
-        var e_time = $('#endTime').timepicker('getTime');
-        $('#startTime').text(moment(s_time).format('a h:mm'));
-        $('#startTime').val(s_time);
-
-        $('#endTime').text(moment(e_time).format('a h:mm'));
-        $('#endTime').val(e_time);
-      })
-    }
-
-  });
-
-  $("#contentEditButton").click( function(e) {
-    if($(this).hasClass('active')){
-      $(this).removeClass('active');
-      $("#eventContent").attr('contenteditable', false);
-    }
-    else {
-      $(this).addClass('active');
-      $("#eventContent").attr('contenteditable', true).focus();
-    }
-
-  });
-
-  $("#emotionEditButton").click( function(e) {
-    if($(this).hasClass('active')){
-      $(this).removeClass('active');
-      $('#happyContent input[type=radio]').prop('disabled', true);
-      $('#satisfactionContent input[type=radio]').prop('disabled', true);
-      $('#depressionContent input[type=radio]').prop('disabled', true);
-      $('#anxietyContent input[type=radio]').prop('disabled', true);
-      $('#angerContent input[type=radio]').prop('disabled', true);
-      $('#fatigueContent input[type=radio]').prop('disabled', true);
-    }
-    else {
-      $(this).addClass('active');
-      $('#happyContent input[type=radio]').prop('disabled', false);
-      $('#satisfactionContent input[type=radio]').prop('disabled', false);
-      $('#depressionContent input[type=radio]').prop('disabled', false);
-      $('#anxietyContent input[type=radio]').prop('disabled', false);
-      $('#angerContent input[type=radio]').prop('disabled', false);
-      $('#fatigueContent input[type=radio]').prop('disabled', false);
-    }
-
-  });
-
-  $("#locationEditButton").click( function(e) {
-    if($(this).hasClass('active')){
-      $(this).removeClass('active');
-      $('#locationContent input[type=radio]').prop('disabled', true);
-    }
-    else {
-      $(this).addClass('active');
-      $('#locationContent input[type=radio]').prop('disabled', false);
-    }
-  });
-
   $("#updateBlockButton").click ( function(e) {
-    if( confirm('수정하시겠습니까?')) {
-      var view = calendar.fullCalendar('getView');
-      console.log(view);
-      var start_time = $("#startTime").val();
-      var end_time = $("#endTime").val();
-      var location = $("#addBlockModal #locationSel input[type=radio]:checked").val();
-      var title = $("#eventContent").text();
-      var happy = $("#addBlockModal #happySel input[type=radio]:checked").val();
-      var satisfaction = $("#addBlockModal #satisfactionSel input[type=radio]:checked").val();
-      var depression = $("#addBlockModal #depressionSel input[type=radio]:checked").val();
-      var anxiety = $("#addBlockModal #anxietySel input[type=radio]:checked").val();
-      var anger = $("#addBlockModal #angerSel input[type=radio]:checked").val();
-      var fatigue = $("#addBlockModal #fatigueSel input[type=radio]:checked").val();
 
-      currentEvent.start = view.type === 'secondday' ? moment(start_time).add(1,'days') : moment(start_time);
-      currentEvent.end = view.type === 'secondday' ? moment(end_time).add(1,'days') : moment(end_time);
-      currentEvent.title = title;
-      currentEvent.content.title = title;
-      currentEvent.content.location = location;
-      currentEvent.content.happy = happy;
-      currentEvent.content.satisfaction = satisfaction;
-      currentEvent.content.depression = depression;
-      currentEvent.content.anxiety = anxiety;
-      currentEvent.content.anger = anger;
-      currentEvent.content.fatigue = fatigue;
+    var view = calendar.fullCalendar('getView');
+    //check if there any changes
+    var start_time = $("#startTime").timepicker('getTime');
+    var end_time = $("#endTime").timepicker('getTime');
+    var location = $("#eventBlockModal #locationContent input[type=radio]:checked").val();
+    var title = $("#eventContent").text();
+    var happy = $("#eventBlockModal #happyContent input[type=radio]:checked").val();
+    var satisfaction = $("#eventBlockModal #satisfactionContent input[type=radio]:checked").val();
+    var agitation = $("#eventBlockModal #agitationContent input[type=radio]:checked").val();
+    var anxiety = $("#eventBlockModal #anxietyContent input[type=radio]:checked").val();
+    var anger = $("#eventBlockModal #angerContent input[type=radio]:checked").val();
+    var fatigue = $("#eventBlockModal #fatigueContent input[type=radio]:checked").val();
 
-      calendar.fullCalendar( 'updateEvent', currentEvent );
+    var newEvent = {};
+
+    newEvent.start = view.type === 'secondday' ? moment(start_time).add(1,'days') : moment(start_time);
+    newEvent.end = view.type === 'secondday' ? moment(end_time).add(1,'days') : moment(end_time);
+    newEvent.title = title;
+    newEvent.content = {};
+    newEvent.content.title = title;
+    newEvent.content.location = location;
+    newEvent.content.happy = happy;
+    newEvent.content.satisfaction = satisfaction;
+    newEvent.content.agitation = agitation;
+    newEvent.content.anxiety = anxiety;
+    newEvent.content.anger = anger;
+    newEvent.content.fatigue = fatigue;
+
+    if( JSON.stringify(newEvent.content) === JSON.stringify(currentEvent.content) && newEvent.start.format('a h:mm') === currentEvent.start.format('a h:mm') && newEvent.end.format('a h:mm') === currentEvent.end.format('a h:mm')){
+      if(confirm('수정사항이 없습니다. 진행하시겠습니까?')){
+        $("#eventBlockModal").modal('hide');
+      }
+    }
+    else {
+      if ( confirm('수정사항이 있습니다. 진행하시겠습니까?') ){
+        currentEvent.start = view.type === 'secondday' || moment(start_time).format('DD') !== moment(currentEvent.start).format('DD') ? moment(start_time).add(1,'days') : moment(start_time);
+        currentEvent.end = view.type === 'secondday' || moment(start_time).format('DD') !== moment(currentEvent.start).format('DD') ? moment(end_time).add(1,'days') : moment(end_time);
+        currentEvent.title = title;
+        currentEvent.content.title = title;
+        currentEvent.content.location = location;
+        currentEvent.content.happy = happy;
+        currentEvent.content.satisfaction = satisfaction;
+        currentEvent.content.agitation = agitation;
+        currentEvent.content.anxiety = anxiety;
+        currentEvent.content.anger = anger;
+        currentEvent.content.fatigue = fatigue;
+
+        calendar.fullCalendar( 'updateEvent', currentEvent );
+
+        var view = calendar.fullCalendar('getView');
+        var curDate = view.start.format('DD');
+        var type = view.type;
+        var events = calendar.fullCalendar( 'clientEvents' );
+        var totTime = {
+          total: 0,
+        };
+        $.each(events, function( index, event ) {
+          var diff = moment.duration( event.end.diff(event.start) ).asMinutes();
+          var date = event.start.format('DD');
+          //if no key, initialize by 0
+          if( !(date in totTime) ) totTime[date] = 0;
+          totTime[date] += diff;
+          totTime['total'] += diff;
+        });
+
+        if(!events.length) {
+          $("#spent-time-hm").html('-');
+        }
+        else {
+          var curHour = Math.floor(totTime[curDate] / 60).toFixed(0);
+          var curMin = (totTime[curDate]) % 60;
+
+          curHour = isNaN(curHour) ? 0 : curHour;
+          curMin = isNaN(curMin) ? 0 : curMin;
+
+          var totHour = Math.floor(totTime['total'] / 60).toFixed(0);
+          var totMin =  totTime['total'] % 60;
+
+          totHour = isNaN(totHour) ? 0 : totHour;
+          totMin = isNaN(totMin) ? 0 : totMin;
+          $("#spent-time-hm").html(
+            type !== 'bothday' ? curHour  + '시간 ' + curMin + '분' :
+                                totHour + '시간 ' + totMin + '분'
+          );
+        }
 
 
-      $("#eventBlockModal").modal('hide');
+        $("#remaining-time").html (
+          type !== 'bothday' ? '/ 24시간' : '/ 48시간'
+        );
+
+        $("#eventBlockModal").modal('hide');
+      }
     }
   });
 
